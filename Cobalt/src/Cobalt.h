@@ -1,3 +1,5 @@
 ﻿#pragma once
 
-#include <iostream>
+#include "Cobalt/Core/Application.h"
+
+#include "Cobalt/Core/EntryPoint.h"

@@ -1,8 +1,21 @@
-﻿#include "Sandbox.h"
+﻿#include "Cobalt.h"
 
-int main()
+#include <iostream>
+
+class Sandbox : public Cobalt::Application
 {
-	std::cout << "Hello World!" << std::endl;
+public:
+	Sandbox()
+	{
+		std::cout << "App Created\n";
+	}
+	~Sandbox()
+	{
+		std::cout << "App Deleted\n";
+	}
+};
 
-	return 0;
+Cobalt::Application* Cobalt::CreateApplication()
+{
+	return new Sandbox();
 }
