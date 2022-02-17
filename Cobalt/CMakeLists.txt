@@ -22,3 +22,6 @@ target_link_libraries(Cobalt glfw)
 add_subdirectory ("vendor/glad")
 target_link_libraries(Cobalt glad)
 
+add_subdirectory("vendor/glm")
+target_link_libraries(Cobalt glm)
+

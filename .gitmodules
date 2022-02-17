@@ -1,3 +1,6 @@
 [submodule "Cobalt/vendor/glfw"]
 	path = Cobalt/vendor/glfw
 	url = https://github.com/glfw/glfw.git
+[submodule "Cobalt/vendor/glm"]
+	path = Cobalt/vendor/glm
+	url = https://github.com/g-truc/glm.git
