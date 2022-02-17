@@ -1,7 +1,5 @@
 #include "Application.h"
 
-#include <iostream>
-
 namespace Cobalt {
 
 	Application::Application()
@@ -15,7 +13,12 @@ namespace Cobalt {
 
 	void Application::Run()
 	{
-		std::cout << "App Running\n";
+		if (!glfwInit())
+			std::cout << "GLFW Failed!\n";
+		else
+			std::cout << "Success!\n";
+
+		glfwTerminate();
 	}
 
 }

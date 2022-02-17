@@ -8,4 +8,4 @@ add_executable(Sandbox
 	"src/Sandbox.cpp" 
 )
 
-target_link_libraries(Sandbox PRIVATE Cobalt)
+target_link_libraries(Sandbox PUBLIC Cobalt)

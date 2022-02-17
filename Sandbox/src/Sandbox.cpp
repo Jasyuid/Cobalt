@@ -7,11 +7,9 @@ class Sandbox : public Cobalt::Application
 public:
 	Sandbox()
 	{
-		std::cout << "App Created\n";
 	}
 	~Sandbox()
 	{
-		std::cout << "App Deleted\n";
 	}
 };
 
