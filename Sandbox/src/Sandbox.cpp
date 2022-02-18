@@ -13,6 +13,5 @@ public:
 
 Cobalt::Application* Cobalt::CreateApplication()
 {
-	CB_TRACE("Starting application...");
 	return new Sandbox();
 }

@@ -35,6 +35,8 @@ namespace Cobalt {
 		CB_CORE_ERROR("Heyo {0}, {1}", 10, 2);
 		CB_CORE_FATAL("Heyo {0}, {1}", 10, 2);
 
+		CB_ASSERT(false, "Assert test!");
+
 		// Jank pause
 		std::string s;
 		std::cin >> s;

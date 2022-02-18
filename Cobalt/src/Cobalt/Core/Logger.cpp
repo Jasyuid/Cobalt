@@ -1,11 +1,9 @@
 #include "Logger.h"
 
-#define CB_PLATFORM_WINDOWS
-
 #ifdef CB_PLATFORM_WINDOWS
-#define SET_CONSOLE_COLOR(x) SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), x);
+	#define SET_CONSOLE_COLOR(x) SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), x);
 #else
-#define SET_CONSOLE_COLOR(x)
+	#define SET_CONSOLE_COLOR(x)
 #endif
 
 namespace Cobalt {
@@ -71,9 +69,9 @@ namespace Cobalt {
 
 			// Print the source
 			if ((type & 0xf0) == Core)
-				std::cout << "Core: ";
+				std::cout << "CORE: ";
 			else if ((type & 0xf0) == App)
-				std::cout << "App: ";
+				std::cout << "APP: ";
 
 			// Print the message
 			std::cout << m << std::endl;
