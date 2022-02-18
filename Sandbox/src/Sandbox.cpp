@@ -1,7 +1,5 @@
 ﻿#include "Cobalt.h"
 
-#include <iostream>
-
 class Sandbox : public Cobalt::Application
 {
 public:
@@ -15,5 +13,6 @@ public:
 
 Cobalt::Application* Cobalt::CreateApplication()
 {
+	CB_TRACE("Starting application...");
 	return new Sandbox();
 }

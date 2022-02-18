@@ -29,6 +29,12 @@ namespace Cobalt {
 		glfwMakeContextCurrent(window);
 		gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 
+		CB_CORE_TRACE("Heyo {0}, {1}", 10, 2);
+		CB_CORE_INFO("Heyo {0}, {1}", 10, 2);
+		CB_CORE_WARN("Heyo {0}, {1}", 10, 2);
+		CB_CORE_ERROR("Heyo {0}, {1}", 10, 2);
+		CB_CORE_FATAL("Heyo {0}, {1}", 10, 2);
+
 		// Jank pause
 		std::string s;
 		std::cin >> s;

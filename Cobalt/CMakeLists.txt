@@ -8,9 +8,13 @@ add_library (Cobalt
 	"src/Cobalt.h"
 	"src/Cobalt/Core/EntryPoint.h"
 	"src/Cobalt/Core/Application.h"
-	"src/Cobalt/Core/Application.cpp")
+	"src/Cobalt/Core/Application.cpp" 
+	"src/Cobalt/Core/Logger.h" 
+	"src/Cobalt/Core/Logger.cpp"  "src/cbpch.h"  "src/Cobalt/Core/Core.h" )
 
 target_include_directories(Cobalt PUBLIC "${PROJECT_SOURCE_DIR}/Cobalt/src")
+
+target_precompile_headers(Cobalt PRIVATE "src/cbpch.h")
 
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
