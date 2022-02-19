@@ -1,47 +1,40 @@
 #include "Application.h"
 
+#define CB_BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)
+
 namespace Cobalt {
+
+	Application* Application::s_Instance = nullptr;
 
 	Application::Application()
 	{
-		
+		CB_CORE_ASSERT(!s_Instance, "Application already exists!");
+		s_Instance = this;
+
+		m_Window = std::unique_ptr<Window>(Window::Create());
+		// TODO: This isn't quite right
+		m_Window->SetEventCallback(std::bind(&Application::OnEvent, this, std::placeholders::_1));
 	}
 
 	Application::~Application()
 	{
 	}
 
+	void Application::OnEvent(Event& e)
+	{
+		m_Running = false;
+	}
+
 	void Application::Run()
 	{
-		if (!glfwInit())
-			std::cout << "GLFW init failed!\n";
+		while (m_Running)
+		{
+			// Window background
+			glClearColor(0.0f, 0.0f, 0.1f, 1.0f);
+			glClear(GL_COLOR_BUFFER_BIT);
 
-		glm::vec3 test_vec = glm::vec3(1.5f, 1.0f, 1.0f);
-		std::cout << test_vec.x << std::endl;
-
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-		GLFWwindow* window = glfwCreateWindow(640, 480, "Test Window", NULL, NULL);
-		if (!window)
-			std::cout << "Window creation failed!\n";
-		
-		glfwMakeContextCurrent(window);
-		gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-
-		CB_CORE_TRACE("Heyo {0}, {1}", 10, 2);
-		CB_CORE_INFO("Heyo {0}, {1}", 10, 2);
-		CB_CORE_WARN("Heyo {0}, {1}", 10, 2);
-		CB_CORE_ERROR("Heyo {0}, {1}", 10, 2);
-		CB_CORE_FATAL("Heyo {0}, {1}", 10, 2);
-
-		CB_ASSERT(false, "Assert test!");
-
-		// Jank pause
-		std::string s;
-		std::cin >> s;
-
-		glfwTerminate();
+			m_Window->OnUpdate();
+		}
 	}
 
 }

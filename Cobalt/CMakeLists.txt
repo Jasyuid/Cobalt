@@ -10,7 +10,13 @@ add_library (Cobalt
 	"src/Cobalt/Core/Application.h"
 	"src/Cobalt/Core/Application.cpp" 
 	"src/Cobalt/Core/Logger.h" 
-	"src/Cobalt/Core/Logger.cpp"  "src/cbpch.h"  "src/Cobalt/Core/Core.h" )
+	"src/Cobalt/Core/Logger.cpp"  
+	"src/cbpch.h"  
+	"src/Cobalt/Core/Core.h"  
+	"src/Cobalt/Core/Window.h" 
+	"src/Cobalt/Core/Window.cpp" 
+	"src/Cobalt/Events/Event.h" 
+	"src/Cobalt/Events/ApplicationEvent.h")
 
 target_include_directories(Cobalt PUBLIC "${PROJECT_SOURCE_DIR}/Cobalt/src")
 

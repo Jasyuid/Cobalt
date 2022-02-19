@@ -1,8 +1,6 @@
 #pragma once
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
+#include "Window.h"
 
 namespace Cobalt {
 
@@ -10,11 +8,21 @@ namespace Cobalt {
 	{
 	public:
 		Application();
-		~Application();
+		virtual ~Application();
+
+		void OnEvent(Event& e);
 
 		void Run();
 		
+		inline Window& GetWindow() { return *m_Window; }
+
+		inline static Application& Get() { return *s_Instance; }
+
 	private:
+		std::unique_ptr<Window> m_Window;
+		bool m_Running = true;
+
+		static Application* s_Instance;
 	};
 
 	Application* CreateApplication();
