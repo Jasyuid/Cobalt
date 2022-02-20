@@ -41,6 +41,8 @@ namespace Cobalt
 		inline void SetEventCallback(const EventCallbackFn& callback) { m_Data.EventCallback = callback; }
 		void SetVSync(bool enabled);
 
+		inline GLFWwindow* GetNativeWindow() const { return m_Window; }
+
 		static Window* Create(const WindowProps& props = WindowProps());
 
 	private:

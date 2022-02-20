@@ -1,5 +1,7 @@
 #pragma once
 
+#include <sstream>
+
 #include "Cobalt/Core/Core.h"
 
 namespace Cobalt
@@ -35,6 +37,7 @@ namespace Cobalt
 
 	class Event
 	{
+		friend class EventDispatcher;
 	public:
 		// Getter functions for events
 		virtual EventType GetEventType() const = 0;
@@ -58,6 +61,33 @@ namespace Cobalt
 
 	class EventDispatcher
 	{
+		// Function to run when specific event is encountered
+		template<typename T>
+		using EventFn = std::function<bool(T&)>;
+	public:
+		EventDispatcher(Event& event)
+			: m_Event(event)
+		{
+		}
 
+		template<typename T>
+		bool Dispatch(EventFn<T> func)
+		{
+			// Check if recieved event matches dispatcher type
+			if (m_Event.GetEventType() == T::GetStaticType())
+			{
+				m_Event.m_Handled = func(*(T*)&m_Event);
+				return true;
+			}
+			return false;
+		}
+
+	private:
+		Event& m_Event;
 	};
+
+	inline std::ostream& operator<<(std::ostream& os, const Event& e)
+	{
+		return os << e.ToString();
+	}
 }

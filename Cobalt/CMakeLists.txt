@@ -16,7 +16,13 @@ add_library (Cobalt
 	"src/Cobalt/Core/Window.h" 
 	"src/Cobalt/Core/Window.cpp" 
 	"src/Cobalt/Events/Event.h" 
-	"src/Cobalt/Events/ApplicationEvent.h")
+	"src/Cobalt/Events/ApplicationEvent.h" 
+	"src/Cobalt/Events/KeyEvent.h" 
+	"src/Cobalt/Events/MouseEvent.h" 
+	"src/Cobalt/Core/Input.h" 
+	"src/Cobalt/Core/Input.cpp" 
+	"src/Cobalt/Core/KeyCodes.h" 
+	"src/Cobalt/Core/MouseButtonCodes.h")
 
 target_include_directories(Cobalt PUBLIC "${PROJECT_SOURCE_DIR}/Cobalt/src")
 
