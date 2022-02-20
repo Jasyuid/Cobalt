@@ -1,6 +1,6 @@
 #include "Application.h"
 
-#define CB_BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)
+#define CB_BIND_EVENT_FN(fn) std::bind(&Application::fn, this, std::placeholders::_1)
 
 namespace Cobalt {
 
@@ -12,21 +12,28 @@ namespace Cobalt {
 		s_Instance = this;
 
 		m_Window = std::unique_ptr<Window>(Window::Create());
-		m_Window->SetEventCallback(std::bind(&Application::OnEvent, this, std::placeholders::_1));
+		m_Window->SetEventCallback(CB_BIND_EVENT_FN(OnEvent));
 	}
 
 	Application::~Application()
 	{
 	}
 
+	void Application::PushLayer(Layer* layer)
+	{
+		m_LayerStack.PushLayer(layer);
+	}
+
+	void Application::PushOverlay(Layer* layer)
+	{
+		m_LayerStack.PushOverlay(layer);
+	}
+
 	void Application::OnEvent(Event& e)
 	{
 		EventDispatcher dispatcher(e);
-		dispatcher.Dispatch<WindowCloseEvent>(std::bind(&Application::OnWindowClose, this, std::placeholders::_1));
-
-		dispatcher.Dispatch<KeyPressedEvent>(std::bind(&Application::OnKeyPress, this, std::placeholders::_1));
-		dispatcher.Dispatch<MouseMovedEvent>(std::bind(&Application::OnMouseMoved, this, std::placeholders::_1));
-		
+		dispatcher.Dispatch<WindowCloseEvent>(CB_BIND_EVENT_FN(OnWindowClose));
+		dispatcher.Dispatch<WindowResizeEvent>(CB_BIND_EVENT_FN(OnWindowResize));
 
 	}
 
@@ -47,23 +54,30 @@ namespace Cobalt {
 		}
 	}
 
-	bool Application::OnWindowClose(WindowCloseEvent& e)
+	void Application::Close()
 	{
 		m_Running = false;
-		return true;
 	}
 
-	bool Application::OnKeyPress(KeyPressedEvent& e)
+	bool Application::OnWindowClose(WindowCloseEvent& e)
 	{
-		CB_TRACE("KeyPressed: {0}", e.GetKeyCode());
+		Close();
 		return true;
 	}
 
-	bool Application::OnMouseMoved(MouseMovedEvent& e)
+	bool Application::OnWindowResize(WindowResizeEvent& e)
 	{
-		CB_TRACE("MouseMoved: ({0}, {1})", e.GetX(), e.GetY());
+		CB_CORE_TRACE("({0}, {1})", e.GetWidth(), e.GetHeight());
+
+		if (e.GetWidth() == 0 || e.GetHeight() == 0)
+		{
+			m_Minimized = true;
+			return false;
+		}
+
+		m_Minimized = false;
+
 		return true;
 	}
-
 
 }

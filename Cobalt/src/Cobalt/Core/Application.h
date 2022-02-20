@@ -3,9 +3,8 @@
 #include "Window.h"
 #include "Cobalt/Events/Event.h"
 #include "Cobalt/Events/ApplicationEvent.h"
-#include "Cobalt/Events/KeyEvent.h"	
-#include "Cobalt/Events/MouseEvent.h"
 #include "Input.h"
+#include "LayerStack.h"
 
 namespace Cobalt {
 
@@ -15,21 +14,28 @@ namespace Cobalt {
 		Application();
 		virtual ~Application();
 
-		void OnEvent(Event& e);
+		void PushLayer(Layer* layer);
+		void PushOverlay(Layer* layer);
 
+		void OnEvent(Event& e);
+		
 		void Run();
 		
-		inline Window& GetWindow() { return *m_Window; }
+		void Close();
 
+		inline Window& GetWindow() const { return *m_Window; }
 		inline static Application& Get() { return *s_Instance; }
 
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
-		bool OnKeyPress(KeyPressedEvent& e);
-		bool OnMouseMoved(MouseMovedEvent& e);
+		bool OnWindowResize(WindowResizeEvent& e);
 
+	private:
 		std::unique_ptr<Window> m_Window;
 		bool m_Running = true;
+		bool m_Minimized = false;
+
+		LayerStack m_LayerStack;
 
 		static Application* s_Instance;
 	};

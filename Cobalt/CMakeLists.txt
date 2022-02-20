@@ -22,7 +22,11 @@ add_library (Cobalt
 	"src/Cobalt/Core/Input.h" 
 	"src/Cobalt/Core/Input.cpp" 
 	"src/Cobalt/Core/KeyCodes.h" 
-	"src/Cobalt/Core/MouseButtonCodes.h")
+	"src/Cobalt/Core/MouseButtonCodes.h" 
+	"src/Cobalt/Core/LayerStack.h" 
+	"src/Cobalt/Core/LayerStack.cpp" 
+	"src/Cobalt/Core/Layer.h"
+	"src/Cobalt/Core/Layer.cpp")
 
 target_include_directories(Cobalt PUBLIC "${PROJECT_SOURCE_DIR}/Cobalt/src")
 
