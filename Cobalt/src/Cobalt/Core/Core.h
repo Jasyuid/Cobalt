@@ -21,3 +21,5 @@
 
 // Macro for changing specific bits
 #define BIT(X) (1 << X)
+
+#include "Logger.h"

@@ -11,7 +11,7 @@ namespace Cobalt
 		// Delete all layers
 		for (Layer* layer : m_Layers)
 		{
-			layer->OnDetatch();
+			layer->OnDetach();
 			// TODO: Not sure it layer stack needs to delete layers
 			delete layer;
 		}
@@ -38,7 +38,7 @@ namespace Cobalt
 		auto it = std::find(m_Layers.begin(), m_Layers.begin() + m_LayerInsertIndex, layer);
 		if (it != m_Layers.begin() + m_LayerInsertIndex)
 		{
-			layer->OnDetatch();
+			layer->OnDetach();
 			m_Layers.erase(it);
 			m_LayerInsertIndex--;
 		}
@@ -50,7 +50,7 @@ namespace Cobalt
 		auto it = std::find(m_Layers.begin() + m_LayerInsertIndex, m_Layers.end(), overlay);
 		if (it != m_Layers.end())
 		{
-			overlay->OnDetatch();
+			overlay->OnDetach();
 			m_Layers.erase(it);
 		}
 	}

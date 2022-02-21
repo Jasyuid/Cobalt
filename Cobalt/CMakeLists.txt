@@ -26,7 +26,15 @@ add_library (Cobalt
 	"src/Cobalt/Core/LayerStack.h" 
 	"src/Cobalt/Core/LayerStack.cpp" 
 	"src/Cobalt/Core/Layer.h"
-	"src/Cobalt/Core/Layer.cpp")
+	"src/Cobalt/Core/Layer.cpp" 
+	"src/Cobalt/Rendering/OpenGL.h" 
+	"src/Cobalt/Rendering/Buffer.h" 
+	"src/Cobalt/Rendering/Buffer.cpp" 
+	"src/Cobalt/Rendering/VertexArray.h" 
+	"src/Cobalt/Rendering/VertexArray.cpp" 
+	"src/Cobalt/Rendering/VertexBufferLayout.h" 
+	"src/Cobalt/Rendering/Shader.h" 
+	"src/Cobalt/Rendering/Shader.cpp")
 
 target_include_directories(Cobalt PUBLIC "${PROJECT_SOURCE_DIR}/Cobalt/src")
 
