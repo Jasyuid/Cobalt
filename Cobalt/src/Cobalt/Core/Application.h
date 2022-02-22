@@ -5,6 +5,7 @@
 #include "Cobalt/Events/ApplicationEvent.h"
 #include "Input.h"
 #include "LayerStack.h"
+#include "Cobalt/Rendering/EditorCamera.h"
 
 namespace Cobalt {
 
@@ -38,6 +39,8 @@ namespace Cobalt {
 		LayerStack m_LayerStack;
 
 		static Application* s_Instance;
+
+		EditorCamera* camera;
 	};
 
 	Application* CreateApplication();

@@ -34,7 +34,10 @@ add_library (Cobalt
 	"src/Cobalt/Rendering/VertexArray.cpp" 
 	"src/Cobalt/Rendering/VertexBufferLayout.h" 
 	"src/Cobalt/Rendering/Shader.h" 
-	"src/Cobalt/Rendering/Shader.cpp")
+	"src/Cobalt/Rendering/Shader.cpp" 
+	"src/Cobalt/Rendering/Camera.h" 
+	"src/Cobalt/Rendering/EditorCamera.h" 
+	"src/Cobalt/Rendering/EditorCamera.cpp")
 
 target_include_directories(Cobalt PUBLIC "${PROJECT_SOURCE_DIR}/Cobalt/src")
 

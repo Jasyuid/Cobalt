@@ -3,10 +3,9 @@
 #include "Cobalt/Rendering/VertexArray.h"
 #include "Cobalt/Rendering/Shader.h"
 #include "Cobalt/Rendering/OpenGL.h"
+
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
-
-#define CB_BIND_EVENT_FN(fn) std::bind(&Application::fn, this, std::placeholders::_1)
 
 namespace Cobalt {
 
@@ -18,7 +17,9 @@ namespace Cobalt {
 		s_Instance = this;
 
 		m_Window = std::unique_ptr<Window>(Window::Create());
-		m_Window->SetEventCallback(CB_BIND_EVENT_FN(OnEvent));
+		m_Window->SetEventCallback(CB_BIND_EVENT_FN(Application::OnEvent));
+
+		camera = new EditorCamera(glm::vec3(0.0f, 0.0f, 0.0f), 5.0f);
 	}
 
 	Application::~Application()
@@ -38,9 +39,13 @@ namespace Cobalt {
 	void Application::OnEvent(Event& e)
 	{
 		EventDispatcher dispatcher(e);
-		dispatcher.Dispatch<WindowCloseEvent>(CB_BIND_EVENT_FN(OnWindowClose));
-		dispatcher.Dispatch<WindowResizeEvent>(CB_BIND_EVENT_FN(OnWindowResize));
+		dispatcher.Dispatch<WindowCloseEvent>(CB_BIND_EVENT_FN(Application::OnWindowClose));
+		dispatcher.Dispatch<WindowResizeEvent>(CB_BIND_EVENT_FN(Application::OnWindowResize));
 
+		if (!e.IsHandled())
+		{
+			camera->OnEvent(e);
+		}
 	}
 
 	const float cube_vertices[] = {
@@ -83,15 +88,10 @@ namespace Cobalt {
 		cubeModel = glm::scale(glm::vec3(1.0f, 1.0f, 1.0f)) * cubeModel;
 		cubeModel = glm::translate(glm::vec3(0.0f, 0.0f, 0.0f)) * cubeModel;
 
-		glm::mat4 projection = glm::perspective(glm::radians(60.0f), 16.0f/9.0f, 0.1f, 10000.0f);
-		glm::mat4 view = glm::lookAt(glm::vec3(5.0f, 5.0f, 5.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0, 1, 0));
-		glm::mat4 cameraModel = projection * view;
-
-
 		Shader basicShader = Shader("res/shaders/Basic.glsl");
 		basicShader.Bind();
 		basicShader.SetUniformMat4("model", cubeModel);
-		basicShader.SetUniformMat4("camera", cameraModel);
+		basicShader.SetUniformMat4("camera", camera->GetCameraMatrix());
 
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);
@@ -102,20 +102,17 @@ namespace Cobalt {
 			glClearColor(0.0f, 0.0f, 0.1f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT);
 
+			camera->OnUpdate(0.0f);
+
 			basicShader.Bind();
 			basicShader.SetUniformMat4("model", cubeModel);
-			basicShader.SetUniformMat4("camera", cameraModel);
+			basicShader.SetUniformMat4("camera", camera->GetCameraMatrix());
 
 			cube_VAO.Bind();
 			cube_IBO.Bind();
 			GLCall(glDrawElements(GL_TRIANGLES, cube_IBO.GetCount(), GL_UNSIGNED_INT, nullptr));
 
 			m_Window->OnUpdate();
-
-			if (Input::IsMouseButtonPressed(CB_MOUSE_BUTTON_MIDDLE))
-			{
-				CB_CORE_TRACE("Middle mouse button is down!");
-			}
 		}
 	}
 
