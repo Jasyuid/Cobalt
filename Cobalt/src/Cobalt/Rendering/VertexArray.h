@@ -11,6 +11,7 @@ public:
 
 	void AddBuffer(const VertexBuffer& vb, const VertexBufferLayout& layout);
 
+	// Bind functions
 	void Bind() const;
 	void Unbind() const;
 

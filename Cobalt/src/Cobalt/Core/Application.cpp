@@ -1,3 +1,4 @@
+#include "cbpch.h"
 #include "Application.h"
 
 #include "Cobalt/Rendering/VertexArray.h"
@@ -45,6 +46,15 @@ namespace Cobalt {
 		if (!e.IsHandled())
 		{
 			camera->OnEvent(e);
+			/*
+			if (e.GetEventType() == EventType::KeyPressed)
+			{
+				if (((KeyPressedEvent*)&e)->GetKeyCode() == CB_KEY_0)
+				{
+					CB_TRACE("YO");
+				}
+			}
+			*/
 		}
 	}
 
@@ -118,13 +128,13 @@ namespace Cobalt {
 
 	void Application::Close()
 	{
-		m_Running = false;
+		m_Running = false; // End main engine loop
 	}
 
 	bool Application::OnWindowClose(WindowCloseEvent& e)
 	{
-		Close();
-		return true;
+		Close(); // Close window
+		return true; // Event handled
 	}
 
 	bool Application::OnWindowResize(WindowResizeEvent& e)
@@ -139,7 +149,7 @@ namespace Cobalt {
 
 		m_Minimized = false;
 
-		return true;
+		return true; // Event handled
 	}
 
 }

@@ -2,6 +2,8 @@
 
 #include "Layer.h"
 
+#include <vector>
+
 namespace Cobalt
 {
 	class LayerStack

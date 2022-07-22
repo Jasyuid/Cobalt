@@ -1,9 +1,7 @@
 #pragma once
 
-// TODO: Put this somewhere better
 #include <glm/glm.hpp>
-
-#include "cbpch.h"
+#include <glm/gtc/type_ptr.hpp>
 
 // Stores raw shaders
 struct ShaderSource
@@ -15,13 +13,14 @@ struct ShaderSource
 class Shader
 {
 public:
-	Shader(const std::string& filepath);
+	Shader(const std::string& filepath); // TODO: Allow differant files for each shader type
 	~Shader();
 
+	// Bind functions
 	void Bind() const;
 	void Unbind() const;
 
-	// Set uniforms
+	// Set shader uniforms
 	void SetUniformInt(const std::string& name, const int& val);
 	void SetUniformFloat(const std::string& name, const float& val);
 	void SetUniformFloat3(const std::string& name, const glm::vec3& vec);

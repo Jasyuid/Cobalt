@@ -1,3 +1,4 @@
+#include "cbpch.h"
 #include "Input.h"
 
 #include "Application.h"
@@ -9,14 +10,14 @@ namespace Cobalt
 	bool Input::IsKeyPressed(unsigned int keycode)
 	{
 		GLFWwindow* window = Application::Get().GetWindow().GetNativeWindow();
-		bool state = glfwGetKey(window, keycode);
+		int state = glfwGetKey(window, keycode);
 		return state == GLFW_PRESS || state == GLFW_REPEAT;
 	}
 
 	bool Input::IsMouseButtonPressed(unsigned int button)
 	{
 		GLFWwindow* window = Application::Get().GetWindow().GetNativeWindow();
-		bool state = glfwGetMouseButton(window, button);
+		int state = glfwGetMouseButton(window, button);
 		return state == GLFW_PRESS;
 	}
 

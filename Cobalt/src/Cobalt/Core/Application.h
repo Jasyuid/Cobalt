@@ -3,6 +3,8 @@
 #include "Window.h"
 #include "Cobalt/Events/Event.h"
 #include "Cobalt/Events/ApplicationEvent.h"
+#include "Cobalt/Events/KeyEvent.h"
+#include "KeyCodes.h"
 #include "Input.h"
 #include "LayerStack.h"
 #include "Cobalt/Rendering/EditorCamera.h"

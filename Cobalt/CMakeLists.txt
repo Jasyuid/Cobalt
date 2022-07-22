@@ -1,9 +1,8 @@
 ﻿# Cobalt Static Library CMake File
-# /Cobalt
+# /Cobalt/Cobalt
 #==============================================================================
 cmake_minimum_required (VERSION 3.8)
 
-#"src/Cobalt.cpp"to the library
 add_library (Cobalt 
 	"src/Cobalt.h"
 	"src/Cobalt/Core/EntryPoint.h"
@@ -37,7 +36,7 @@ add_library (Cobalt
 	"src/Cobalt/Rendering/Shader.cpp" 
 	"src/Cobalt/Rendering/Camera.h" 
 	"src/Cobalt/Rendering/EditorCamera.h" 
-	"src/Cobalt/Rendering/EditorCamera.cpp")
+	"src/Cobalt/Rendering/EditorCamera.cpp" "src/Cobalt/Rendering/Texture.h" "src/Cobalt/Rendering/Texture.cpp")
 
 target_include_directories(Cobalt PUBLIC "${PROJECT_SOURCE_DIR}/Cobalt/src")
 
@@ -59,4 +58,7 @@ target_link_libraries(Cobalt glad)
 
 add_subdirectory("vendor/glm")
 target_link_libraries(Cobalt glm)
+
+add_subdirectory("vendor/stb_image")
+target_link_libraries(Cobalt stb_image)
 

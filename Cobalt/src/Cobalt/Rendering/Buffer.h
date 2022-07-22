@@ -7,6 +7,7 @@ public:
 	VertexBuffer(const float* data, unsigned int size);
 	~VertexBuffer();
 
+	// Bind functions
 	void Bind() const;
 	void Unbind() const;
 
@@ -22,6 +23,7 @@ public:
 	IndexBuffer(const unsigned int* data, unsigned int count);
 	~IndexBuffer();
 
+	// Bind functions
 	void Bind() const;
 	void Unbind() const;
 

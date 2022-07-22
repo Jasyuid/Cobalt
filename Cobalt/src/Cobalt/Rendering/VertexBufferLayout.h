@@ -1,16 +1,14 @@
 #pragma once
 
-#include <glad/glad.h>
-
-#include "cbpch.h"
+#include "OpenGL.h"
 
 struct VertexBufferElement
 {
-	unsigned int type;
-	unsigned int count;
-	unsigned int normalized;
+	unsigned int type; // Data type of element
+	unsigned int count; // Quantity of data type
+	unsigned int normalized; // Is data normalized
 
-	// Get the size of one piece of the elements
+	// Get the size of one piece of the elements in bytes
 	static unsigned int GetSizeOfType(unsigned int type)
 	{
 		switch (type)
@@ -24,6 +22,7 @@ struct VertexBufferElement
 	}
 };
 
+// Vertex layout for create a vertex array object
 class VertexBufferLayout
 {
 public:
@@ -37,6 +36,7 @@ public:
 		static_assert(false);
 	}
 
+	// Push float
 	template<>
 	void Push<float>(unsigned int count)
 	{
@@ -44,6 +44,7 @@ public:
 		m_Stride += count * VertexBufferElement::GetSizeOfType(GL_FLOAT);
 	}
 
+	// Push unsigned int
 	template<>
 	void Push<unsigned int>(unsigned int count)
 	{
@@ -51,6 +52,7 @@ public:
 		m_Stride += count * VertexBufferElement::GetSizeOfType(GL_UNSIGNED_INT);
 	}
 
+	// Push unsigned byte
 	template<>
 	void Push<unsigned char>(unsigned int count)
 	{

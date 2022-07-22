@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Camera.h"
+
 #include "Cobalt/Events/Event.h"
 #include "Cobalt/Events/MouseEvent.h"
 
@@ -35,31 +36,35 @@ namespace Cobalt
 		void UpdateView();
 		void UpdateProjection();
 
+		// Mouse scroll callback
 		bool OnMouseScroll(MouseScrolledEvent& e);
 
+		// Mouse camera movement
 		void MousePan(const glm::vec2& delta);
 		void MouseRotate(const glm::vec2& delta);
 		void MouseZoom(float delta);
 
+		// Keyboard camera movement
 		void KeyboardPan(const glm::vec2& delta);
 
+		// Calculate current camera speed
 		std::pair<float, float> PanSpeed() const;
 		float ZoomSpeed() const;
 
 	private:
-		float m_FOV = 45.0f, m_AspectRatio = 16.0f/9.0f, m_NearPlane = 0.1f, m_Farplane = 1000.0f;
+		float m_FOV = 45.0f, m_AspectRatio = 16.0f/9.0f, m_NearPlane = 0.1f, m_Farplane = 1000.0f; // Default camera values
 
-		glm::mat4 m_Projection, m_View;
+		glm::mat4 m_Projection, m_View; // Camera matrices
 		
-		glm::vec3 m_Focus;
-		float m_Distance;
-		float m_Yaw, m_Pitch;
+		glm::vec3 m_Focus; // Focus point
+		float m_Distance; // Distance from focus point
+		float m_Yaw, m_Pitch; // Pitch and yaw of camera
 		
-		glm::vec3 m_Position;
+		glm::vec3 m_Position; // Poition of camera
 
-		glm::vec2 m_PrevMousePosition = { 0.0f, 0.0f };
-		float m_MinDistance = 0.1f; // TODO: Make a cleaner solution
+		glm::vec2 m_PrevMousePosition = { 0.0f, 0.0f }; // Used to calculate mouse speed for camera speed
+		float m_MinDistance = 0.1f; // Minimum distance of camera to focus point
 
-		float m_ViewportWidth, m_ViewportHeight;
+		float m_ViewportWidth, m_ViewportHeight; // Current window size
 	};
 }

@@ -1,15 +1,14 @@
+#include "cbpch.h"
 #include "Shader.h"
-
-#include <fstream>
-
-#include "glm/gtc/type_ptr.hpp"
 
 #include "OpenGL.h"
 
 Shader::Shader(const std::string& filepath)
 	: m_RendererID(0), m_FilePath(filepath)
 {
+	// Load and parse shader source file
 	ShaderSource source = ParseShader(filepath);
+	// Create shader from shader source
 	m_RendererID = CreateShader(source.VertexSource, source.FragmentSource);
 }
 
@@ -100,41 +99,39 @@ unsigned int Shader::CompileShader(unsigned int type, const std::string& source)
 	return id;
 }
 
+// Bind functions
 void Shader::Bind() const
 {
 	GLCall(glUseProgram(m_RendererID));
 }
-
 void Shader::Unbind() const
 {
 	GLCall(glUseProgram(0));
 }
 
+// Shader uniform helper functions
 void Shader::SetUniformInt(const std::string& name, const int& val)
 {
 	GLCall(glUniform1i(GetUniformLocation(name), val));
 }
-
 void Shader::SetUniformFloat(const std::string& name, const float& val)
 {
 	GLCall(glUniform1f(GetUniformLocation(name), val));
 }
-
 void Shader::SetUniformFloat3(const std::string& name, const glm::vec3& vec)
 {
 	GLCall(glUniform3fv(GetUniformLocation(name), 1, glm::value_ptr(vec)));
 }
-
 void Shader::SetUniformFloat4(const std::string& name, const glm::vec4& vec)
 {
 	GLCall(glUniform4fv(GetUniformLocation(name), 1, glm::value_ptr(vec)));
 }
-
 void Shader::SetUniformMat4(const std::string& name, const glm::mat4& mat)
 {
 	GLCall(glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, &mat[0][0]));
 }
 
+// Gets and stores shader uniform locations
 int Shader::GetUniformLocation(const std::string& name)
 {
 	// Check if location was already found

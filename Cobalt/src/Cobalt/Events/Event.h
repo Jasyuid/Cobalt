@@ -1,14 +1,14 @@
 #pragma once
 
-#include "cbpch.h"
-
 #include "Cobalt/Core/Core.h"
 
+#include <sstream>
+
+// Macro for binding function to event
 #define CB_BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)
 
 namespace Cobalt
 {
-
 	// Event types
 	enum class EventType
 	{
@@ -37,6 +37,7 @@ namespace Cobalt
 
 #define EVENT_CLASS_CATEGORY(category) virtual unsigned char GetCategoryFlags() const override { return category; }
 
+
 	class Event
 	{
 		friend class EventDispatcher;
@@ -61,6 +62,7 @@ namespace Cobalt
 		bool m_Handled = false;
 	};
 
+	// Class for 
 	class EventDispatcher
 	{
 		// Function to run when specific event is encountered
@@ -78,16 +80,17 @@ namespace Cobalt
 			// Check if recieved event matches dispatcher type
 			if (m_Event.GetEventType() == T::GetStaticType())
 			{
-				m_Event.m_Handled = func(*(T*)&m_Event);
+				m_Event.m_Handled = func(*(T*)&m_Event); // Run event callback functions
 				return true;
 			}
 			return false;
 		}
 
 	private:
-		Event& m_Event;
+		Event& m_Event; // Event being handled
 	};
 
+	// Print event data
 	inline std::ostream& operator<<(std::ostream& os, const Event& e)
 	{
 		return os << e.ToString();

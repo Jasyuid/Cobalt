@@ -1,9 +1,8 @@
 ﻿# Cobalt Static Library CMake File
-# /Cobalt/Cobalt
+# /Cobalt/Cobalt/glad
 #==============================================================================
 cmake_minimum_required (VERSION 3.8)
 
-#"src/Cobalt.cpp"to the library
 project(glad)
 
 add_library(glad include/glad/glad.h src/glad.c)
