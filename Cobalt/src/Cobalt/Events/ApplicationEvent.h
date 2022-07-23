@@ -4,6 +4,7 @@
 
 namespace Cobalt
 {
+	// Window resized event
 	class WindowResizeEvent : public Event
 	{
 	public:
@@ -23,9 +24,10 @@ namespace Cobalt
 		EVENT_CLASS_TYPE(WindowResize);
 		EVENT_CLASS_CATEGORY(EventCategoryApplication);
 	private:
-		unsigned m_Width, m_Height;
+		unsigned m_Width, m_Height; // New window dimensions
 	};
 
+	// Window closed event
 	class WindowCloseEvent : public Event
 	{
 	public:

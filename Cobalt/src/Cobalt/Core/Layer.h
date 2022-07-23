@@ -18,7 +18,9 @@ namespace Cobalt
 		inline const std::string& GetName() const { return m_DebugName; }
 
 	protected:
-		// Debug name for layer
-		std::string m_DebugName;
+		std::string m_DebugName; // Debug name for layer
 	};
+
+	// Print layer debug name
+	inline std::ostream& operator<<(std::ostream& os, const Layer& l) { return os << l.GetName(); }
 }

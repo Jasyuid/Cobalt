@@ -5,6 +5,7 @@
 
 namespace Cobalt
 {
+	// Global functions to check keyboard and mouse input status on demand
 	class Input
 	{
 	public:

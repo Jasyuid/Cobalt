@@ -4,6 +4,7 @@
 
 namespace Cobalt
 {
+	// Parent class for key events
 	class KeyEvent : public Event
 	{
 	public:
@@ -17,26 +18,28 @@ namespace Cobalt
 		int m_KeyCode;
 	};
 
+	// Key pressed event
 	class KeyPressedEvent : public KeyEvent
 	{
 	public:
-		KeyPressedEvent(int keycode, int repeatCount)
-			: KeyEvent(keycode), m_RepeatCount(repeatCount) {}
+		KeyPressedEvent(int keycode, bool repeat)
+			: KeyEvent(keycode), m_Repeat(repeat) {}
 
-		inline int GetRepeatCount() const { return m_RepeatCount; }
+		inline int GetRepeatCount() const { return m_Repeat; }
 
 		std::string ToString() const override
 		{
 			std::stringstream ss;
-			ss << "KeyPressedEvent: " << m_KeyCode << " (" << m_RepeatCount << " repeats)";
+			ss << "KeyPressedEvent: " << m_KeyCode << " (Repeat: " << m_Repeat << " )";
 			return ss.str();
 		}
 
 		EVENT_CLASS_TYPE(KeyPressed);
 	private:
-		int m_RepeatCount;
+		bool m_Repeat; // If key press is a repeat
 	};
 
+	// Key released event
 	class KeyReleasedEvent : public KeyEvent
 	{
 	public:
@@ -53,6 +56,7 @@ namespace Cobalt
 		EVENT_CLASS_TYPE(KeyReleased);
 	};
 
+	// Key typed event (Corresponds to actual character data being sent)
 	class KeyTypedEvent : public KeyEvent
 	{
 	public:

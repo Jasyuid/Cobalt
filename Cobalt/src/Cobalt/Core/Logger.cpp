@@ -1,6 +1,7 @@
 #include "cbpch.h"
 #include "Logger.h"
 
+// If on windows, enable console colors
 #ifdef CB_PLATFORM_WINDOWS
 	#define SET_CONSOLE_COLOR(x) SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), x);
 #else
@@ -54,6 +55,7 @@ namespace Cobalt {
 			time_t now = time(0);
 			struct tm time_info;
 			localtime_s(&time_info, &now);
+
 			// Print the time
 			if (time_info.tm_hour < 10)
 				std::cout << "[0" << time_info.tm_hour << ":";
@@ -81,6 +83,7 @@ namespace Cobalt {
 			SET_CONSOLE_COLOR(FG_WHITE);
 		}
 
+		// Final format loop, move to printing
 		void formatMessage(int count, unsigned int type, std::string m)
 		{
 			printMessage(type, m);

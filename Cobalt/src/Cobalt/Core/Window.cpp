@@ -7,13 +7,16 @@
 
 namespace Cobalt
 {
+	// Global variable so GLFW is only initialized once (If multiple windows were ever created)
 	static bool s_GLFWInitialized = false;
 
+	// Callback function for GLFW errors
 	void GLFWErrorCallback(int error, const char* description)
 	{
 		CB_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
 	}
 
+	// Window creator helper function
 	Window* Window::Create(const WindowProps& props)
 	{
 		return new Window(props);
@@ -31,6 +34,7 @@ namespace Cobalt
 
 	void Window::Init(const WindowProps& props)
 	{
+		// Store window data from input struct
 		m_Data.Title = props.Title;
 		m_Data.Width = props.Width;
 		m_Data.Height = props.Height;
@@ -41,11 +45,12 @@ namespace Cobalt
 		if (!s_GLFWInitialized)
 		{
 			int success = glfwInit();
-			CB_CORE_ASSERT(success, "Could not initialize GLFW!");
-			glfwSetErrorCallback(GLFWErrorCallback);
+			CB_CORE_ASSERT(success, "Could not initialize GLFW!"); // Check if initialzed
+			glfwSetErrorCallback(GLFWErrorCallback); // Set error callback
 			s_GLFWInitialized = true;
 		}
 
+		// Set desired OpenGL requirements
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -55,9 +60,9 @@ namespace Cobalt
 		glfwMakeContextCurrent(m_Window);
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		CB_CORE_ASSERT(status, "Failed to initialize Glad!");
-		// Associate window data struct with the glfw window (Make the data global)
+		// Associate window data struct with the glfw window (Make the data globally accessible)
 		glfwSetWindowUserPointer(m_Window, &m_Data);
-		SetVSync(true);
+		SetVSync(true); // TODO: Make this not hardcoded
 
 		// Set GLFW callbacks
 		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
@@ -67,7 +72,7 @@ namespace Cobalt
 			data.Width = width;
 			data.Height = height;
 
-			// Create an event and send it to the event callback function specified
+			// Create an event and send it to the event callback function
 			WindowResizeEvent event(width, height);
 			data.EventCallback(event);
 		});
@@ -77,30 +82,34 @@ namespace Cobalt
 			// Get window info
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
-			// Create an event and send it to the event callback function specified
+			// Create an event and send it to the event callback function
 			WindowCloseEvent event;
-			//CB_CORE_TRACE("EventCallback: {0}", data.EventCallback);
 			data.EventCallback(event);
 		});
 
+		// Callback based on physical key press
 		glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int mods)
 		{
+			// Get window info
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
 			switch (action)
 			{
+			// Key pressed event
 			case GLFW_PRESS:
 			{
 				KeyPressedEvent event(key, 0);
 				data.EventCallback(event);
 				break;
 			}
+			// Key released event
 			case GLFW_RELEASE:
 			{
 				KeyReleasedEvent event(key);
 				data.EventCallback(event);
 				break;
 			}
+			// Key held down beyond initial detection
 			case GLFW_REPEAT:
 			{
 				KeyPressedEvent event(key, 1);
@@ -110,16 +119,20 @@ namespace Cobalt
 			}
 		});
 
+		// Callback based on unicode data being sent, 
 		glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int keycode)
 			{
+				// Get window info
 				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
+				// Create an event and send it to the event callback function
 				KeyTypedEvent event(keycode);
 				data.EventCallback(event);
 			});
 
 		glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods)
 		{
+			// Get window info
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
 			switch (action)
@@ -141,6 +154,7 @@ namespace Cobalt
 
 		glfwSetScrollCallback(m_Window, [](GLFWwindow* window, double xOffset, double yOffset)
 		{
+			// Get window info
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
 			MouseScrolledEvent event((float)xOffset, (float)yOffset);
@@ -149,6 +163,7 @@ namespace Cobalt
 
 		glfwSetCursorPosCallback(m_Window, [](GLFWwindow* window, double xPos, double yPos)
 		{
+			// Get window info
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
 			MouseMovedEvent event((float)xPos, (float)yPos);
@@ -159,15 +174,15 @@ namespace Cobalt
 	void Window::Shutdown()
 	{
 		CB_CORE_INFO("Destroying Window");
-		glfwDestroyWindow(m_Window);
+		glfwDestroyWindow(m_Window); // Destroy GLFW window
 		CB_CORE_INFO("Terminating GLFW");
-		glfwTerminate();
+		glfwTerminate(); // Close GLFW
 	}
 
 	void Window::OnUpdate()
 	{
-		glfwPollEvents();
-		glfwSwapBuffers(m_Window);
+		glfwPollEvents(); // Detect any events that occured so callbacks can be used
+		glfwSwapBuffers(m_Window); // Swap current buffer being displayed on window (Change the frame)
 	}
 
 	void Window::SetVSync(bool enabled)

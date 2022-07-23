@@ -4,6 +4,7 @@
 
 namespace Cobalt
 {
+	// Mouse moved event
 	class MouseMovedEvent : public Event
 	{
 	public:
@@ -23,9 +24,10 @@ namespace Cobalt
 		EVENT_CLASS_TYPE(MouseMoved);
 		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput);
 	private:
-		float m_MouseX, m_MouseY;
+		float m_MouseX, m_MouseY; // Mouse coordinated after movement
 	};
 
+	// Mouse scrolled event
 	class MouseScrolledEvent : public Event
 	{
 	public:
@@ -45,9 +47,10 @@ namespace Cobalt
 		EVENT_CLASS_TYPE(MouseScrolled);
 		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput);
 	private:
-		float m_XOffset, m_YOffset;
+		float m_XOffset, m_YOffset; // Amount of offset in scroll
 	};
 
+	// Mouse button event parent class
 	class MouseButtonEvent : public Event
 	{
 	public:
@@ -58,9 +61,10 @@ namespace Cobalt
 		MouseButtonEvent(int button)
 			:m_Button(button) {}
 
-		int m_Button;
+		int m_Button; // Mouse button pressed
 	};
 
+	// Mouse button pressed event
 	class MouseButtonPressedEvent : public MouseButtonEvent
 	{
 	public:
@@ -77,6 +81,7 @@ namespace Cobalt
 		EVENT_CLASS_TYPE(MouseButtonPressed);
 	};
 
+	// Mouse button released event
 	class MouseButtonReleasedEvent : public MouseButtonEvent
 	{
 	public:

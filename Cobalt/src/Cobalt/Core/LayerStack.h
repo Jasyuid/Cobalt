@@ -17,12 +17,11 @@ namespace Cobalt
 		void PopLayer(Layer* layer);
 		void PopOverlay(Layer* overlay);
 
+		// Get iterators for bottom and top of layer stack
 		std::vector<Layer*>::iterator begin() { return m_Layers.begin(); }
 		std::vector<Layer*>::iterator end() { return m_Layers.end(); }
 	private:
-		// The stack of layers
-		std::vector<Layer*> m_Layers;
-		// Iterator to determine where to push new layers
-		unsigned int m_LayerInsertIndex = 0;
+		std::vector<Layer*> m_Layers; // The stack of layers
+		unsigned int m_LayerInsertIndex = 0; // Iterator to determine where to push new layers
 	};
 }

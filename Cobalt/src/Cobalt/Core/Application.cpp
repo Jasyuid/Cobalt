@@ -46,12 +46,13 @@ namespace Cobalt {
 		if (!e.IsHandled())
 		{
 			camera->OnEvent(e);
+			
 			/*
 			if (e.GetEventType() == EventType::KeyPressed)
 			{
 				if (((KeyPressedEvent*)&e)->GetKeyCode() == CB_KEY_0)
 				{
-					CB_TRACE("YO");
+					CB_TRACE("{0}", e);
 				}
 			}
 			*/

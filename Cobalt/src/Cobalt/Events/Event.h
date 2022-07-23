@@ -74,6 +74,7 @@ namespace Cobalt
 		{
 		}
 
+		// Run specified function to handle event
 		template<typename T>
 		bool Dispatch(EventFn<T> func)
 		{

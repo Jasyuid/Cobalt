@@ -20,15 +20,15 @@ namespace Cobalt
 
 	void LayerStack::PushLayer(Layer* layer)
 	{
-		// Push layer to the end of all regular layers in the layer stack
+		// Push layer to the top of the layer stack
 		m_Layers.emplace(m_Layers.begin() + m_LayerInsertIndex, layer);
-		m_LayerInsertIndex++;
+		m_LayerInsertIndex++; // Increment layer insertion locations
 		layer->OnAttach();
 	}
 
 	void LayerStack::PushOverlay(Layer* overlay)
 	{
-		// Add overlay layers to the end of the layer stack
+		// Add overlay layers to the top of the layer stack
 		m_Layers.emplace_back(overlay);
 		overlay->OnAttach();
 	}
@@ -39,9 +39,14 @@ namespace Cobalt
 		auto it = std::find(m_Layers.begin(), m_Layers.begin() + m_LayerInsertIndex, layer);
 		if (it != m_Layers.begin() + m_LayerInsertIndex)
 		{
+			// TODO: Do I need to delete layer here, or does called do it?
 			layer->OnDetach();
 			m_Layers.erase(it);
 			m_LayerInsertIndex--;
+		}
+		else
+		{
+			CB_CORE_WARN("Unable to find layer '{0}' to pop!", layer);
 		}
 	}
 
@@ -51,8 +56,13 @@ namespace Cobalt
 		auto it = std::find(m_Layers.begin() + m_LayerInsertIndex, m_Layers.end(), overlay);
 		if (it != m_Layers.end())
 		{
+			// TODO: Do I need to delete overlay here, or does called do it?
 			overlay->OnDetach();
 			m_Layers.erase(it);
+		}
+		else
+		{
+			CB_CORE_WARN("Unable to find overlay '{0}' to pop!", overlay);
 		}
 	}
 }

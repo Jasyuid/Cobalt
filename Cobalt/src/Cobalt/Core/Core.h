@@ -1,6 +1,8 @@
 #pragma once
 
-// Enable asserts if in debug mode
+#include "Logger.h"
+
+// Enable asserts if in debug mode and enable breakpoints if on windows
 #ifndef NDEBUG
 	#if defined(CB_PLATFORM_WINDOWS)
 		#define CB_DEBUGBREAK() __debugbreak()
@@ -21,5 +23,3 @@
 
 // Macro for changing specific bits
 #define BIT(X) (1 << X)
-
-#include "Logger.h"
