@@ -130,8 +130,8 @@ namespace Cobalt
 	// TODO: Change arbitrary numbers?
 	float EditorCamera::ZoomSpeed() const
 	{
-		float distance = m_Distance * 0.035f;
-		float speed = distance * distance;
+		float distance = m_Distance * 0.35f;
+		float speed = distance * distance * 0.1f;
 		speed = std::min(speed, 100.0f);
 		return speed;
 	}

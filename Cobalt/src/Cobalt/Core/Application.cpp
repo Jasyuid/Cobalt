@@ -3,6 +3,7 @@
 
 #include "Cobalt/Rendering/VertexArray.h"
 #include "Cobalt/Rendering/Shader.h"
+#include "Cobalt/Rendering/Texture.h"
 #include "Cobalt/Rendering/OpenGL.h"
 
 #include <glm/gtc/matrix_transform.hpp>
@@ -69,6 +70,16 @@ namespace Cobalt {
 		-1.0f, 1.0f, 1.0f,		0.0f, 1.0f, 1.0f, //6
 		 1.0f, 1.0f, 1.0f,		1.0f, 1.0f, 1.0f  //7
 	};
+	const float cube_tc_vertices[] = {
+		-1.0f,-1.0f,-1.0f,		0.0f, 0.0f, //0
+		 1.0f,-1.0f,-1.0f,		1.0f, 0.0f, //1
+		-1.0f, 1.0f,-1.0f,		0.0f, 1.0f, //2
+		 1.0f, 1.0f,-1.0f,		1.0f, 1.0f, //3
+		-1.0f,-1.0f, 1.0f,		0.0f, 0.0f, //4
+		 1.0f,-1.0f, 1.0f,		1.0f, 0.0f, //5
+		-1.0f, 1.0f, 1.0f,		0.0f, 1.0f, //6
+		 1.0f, 1.0f, 1.0f,		1.0f, 1.0f  //7
+	};
 	const unsigned int cube_indices[] = {
 			2, 1, 0, //Front-1
 			1, 2, 3, //Front-2
@@ -86,12 +97,12 @@ namespace Cobalt {
 
 	void Application::Run()
 	{
-		VertexBuffer cube_VBO = VertexBuffer(cube_vertices, 8 * 6 * sizeof(float));
+		VertexBuffer cube_VBO = VertexBuffer(cube_tc_vertices, 8 * 5 * sizeof(float));
 		IndexBuffer cube_IBO = IndexBuffer(cube_indices, 12 * 3);
 
 		VertexBufferLayout layout;
 		layout.Push<float>(3);
-		layout.Push<float>(3);
+		layout.Push<float>(2);
 		VertexArray cube_VAO = VertexArray();
 		cube_VAO.AddBuffer(cube_VBO, layout);
 
@@ -99,10 +110,14 @@ namespace Cobalt {
 		cubeModel = glm::scale(glm::vec3(1.0f, 1.0f, 1.0f)) * cubeModel;
 		cubeModel = glm::translate(glm::vec3(0.0f, 0.0f, 0.0f)) * cubeModel;
 
-		Shader basicShader = Shader("res/shaders/Basic.glsl");
-		basicShader.Bind();
-		basicShader.SetUniformMat4("model", cubeModel);
-		basicShader.SetUniformMat4("camera", camera->GetCameraMatrix());
+		Texture texture = Texture("res/squares.png");
+		texture.Bind(0);
+		
+		Shader basicTexShader = Shader("res/shaders/BasicTexture.glsl");
+		basicTexShader.Bind();
+		basicTexShader.SetUniformMat4("model", cubeModel);
+		basicTexShader.SetUniformMat4("camera", camera->GetCameraMatrix());
+		basicTexShader.SetUniformInt("diffuse", 0);
 
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);
@@ -115,9 +130,9 @@ namespace Cobalt {
 
 			camera->OnUpdate(0.0f);
 
-			basicShader.Bind();
-			basicShader.SetUniformMat4("model", cubeModel);
-			basicShader.SetUniformMat4("camera", camera->GetCameraMatrix());
+			basicTexShader.Bind();
+			basicTexShader.SetUniformMat4("model", cubeModel);
+			basicTexShader.SetUniformMat4("camera", camera->GetCameraMatrix());
 
 			cube_VAO.Bind();
 			cube_IBO.Bind();
