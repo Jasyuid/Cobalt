@@ -36,7 +36,11 @@ add_library (Cobalt
 	"src/Cobalt/Rendering/Shader.cpp" 
 	"src/Cobalt/Rendering/Camera.h" 
 	"src/Cobalt/Rendering/EditorCamera.h" 
-	"src/Cobalt/Rendering/EditorCamera.cpp" "src/Cobalt/Rendering/Texture.h" "src/Cobalt/Rendering/Texture.cpp")
+	"src/Cobalt/Rendering/EditorCamera.cpp" 
+	"src/Cobalt/Rendering/Texture.h" 
+	"src/Cobalt/Rendering/Texture.cpp" 
+	"src/Cobalt/Rendering/Mesh.h" 
+	"src/Cobalt/Rendering/Mesh.cpp")
 
 target_include_directories(Cobalt PUBLIC "${PROJECT_SOURCE_DIR}/Cobalt/src")
 
@@ -51,14 +55,18 @@ set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 
 add_subdirectory ("vendor/glfw")
-target_link_libraries(Cobalt glfw)
+target_link_libraries(Cobalt PUBLIC glfw)
 
 add_subdirectory ("vendor/glad")
-target_link_libraries(Cobalt glad)
+target_link_libraries(Cobalt PUBLIC glad)
 
 add_subdirectory("vendor/glm")
-target_link_libraries(Cobalt glm)
+target_link_libraries(Cobalt PUBLIC glm)
 
 add_subdirectory("vendor/stb_image")
-target_link_libraries(Cobalt stb_image)
+target_link_libraries(Cobalt PRIVATE stb_image)
+
+add_subdirectory("vendor/assimp")
+target_link_libraries(Cobalt PRIVATE assimp)
+
 

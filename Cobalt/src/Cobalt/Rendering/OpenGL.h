@@ -4,6 +4,7 @@
 
 #include "Cobalt/Core/Core.h"
 
+
 ///////////////////////////////////////////////////////////////////////////////
 // MAIN INCLUDE FILE FOR OPENGL FUNCTIONAILTY
 ///////////////////////////////////////////////////////////////////////////////
@@ -13,19 +14,23 @@
 				x;\
 				CB_CORE_ASSERT(GLLogCall(), #x);
 
-// Clear all OpenGL errors
-static void GLClearError()
+namespace Cobalt
 {
-	while (glGetError() != GL_NO_ERROR);
-}
-
-// Check for any OpenGL errors
-static bool GLLogCall()
-{
-	while (GLenum error = glGetError())
+	// Clear all OpenGL errors
+	static void GLClearError()
 	{
-		CB_CORE_FATAL("OpenGL Error ({0})", error);
-		return false;
+		while (glGetError() != GL_NO_ERROR);
 	}
-	return true;
+
+	// Check for any OpenGL errors
+	static bool GLLogCall()
+	{
+		while (GLenum error = glGetError())
+		{
+			CB_CORE_FATAL("OpenGL Error ({0})", error);
+			return false;
+		}
+		return true;
+	}
+
 }
