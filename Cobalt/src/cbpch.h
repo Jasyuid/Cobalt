@@ -24,6 +24,8 @@
 // GLM
 #include <glm/glm.hpp>
 #include <glm/common.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/transform.hpp>
 
 // Project Core
 #include "Cobalt/Core/Core.h"

@@ -8,8 +8,4 @@ namespace Cobalt
 		: m_DebugName(debugName)
 	{
 	}
-
-	Layer::~Layer()
-	{
-	}
 }

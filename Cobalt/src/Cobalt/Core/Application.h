@@ -7,6 +7,7 @@
 #include "KeyCodes.h"
 #include "Input.h"
 #include "LayerStack.h"
+#include "Scene.h"
 #include "Cobalt/Rendering/EditorCamera.h"
 
 namespace Cobalt {

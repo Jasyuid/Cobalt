@@ -40,7 +40,7 @@ add_library (Cobalt
 	"src/Cobalt/Rendering/Texture.h" 
 	"src/Cobalt/Rendering/Texture.cpp" 
 	"src/Cobalt/Rendering/Mesh.h" 
-	"src/Cobalt/Rendering/Mesh.cpp")
+	"src/Cobalt/Rendering/Mesh.cpp" "src/Cobalt/Core/Scene.h" "src/Cobalt/Core/Scene.cpp" "src/Cobalt/Rendering/Model.h" "src/Cobalt/Rendering/Model.cpp")
 
 target_include_directories(Cobalt PUBLIC "${PROJECT_SOURCE_DIR}/Cobalt/src")
 
@@ -67,6 +67,6 @@ add_subdirectory("vendor/stb_image")
 target_link_libraries(Cobalt PRIVATE stb_image)
 
 add_subdirectory("vendor/assimp")
-target_link_libraries(Cobalt PRIVATE assimp)
+target_link_libraries(Cobalt PUBLIC assimp)
 
 

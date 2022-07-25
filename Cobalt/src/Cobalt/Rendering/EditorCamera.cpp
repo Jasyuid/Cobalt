@@ -112,6 +112,7 @@ namespace Cobalt
 		if (m_Distance < m_MinDistance)
 			m_Distance = m_MinDistance;
 
+		CB_TRACE("Zoom: {0}", m_Distance);
 	}
 
 	// TODO: Add keyboard pan functionality

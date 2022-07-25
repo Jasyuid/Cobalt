@@ -2,6 +2,7 @@
 #include "Texture.h"
 
 #include "OpenGL.h"
+
 #include <stb_image.h>
 
 namespace Cobalt

@@ -5,6 +5,7 @@
 #include "Cobalt/Rendering/Shader.h"
 #include "Cobalt/Rendering/Texture.h"
 #include "Cobalt/Rendering/OpenGL.h"
+#include "Cobalt/Rendering/Model.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
@@ -97,6 +98,8 @@ namespace Cobalt {
 
 	void Application::Run()
 	{
+
+		/*
 		VertexBuffer cube_VBO = VertexBuffer(cube_tc_vertices, 8 * 5 * sizeof(float));
 		IndexBuffer cube_IBO = IndexBuffer(cube_indices, 12 * 3);
 
@@ -118,6 +121,17 @@ namespace Cobalt {
 		basicTexShader.SetUniformMat4("model", cubeModel);
 		basicTexShader.SetUniformMat4("camera", camera->GetCameraMatrix());
 		basicTexShader.SetUniformInt("diffuse", 0);
+		*/
+
+		Model model = Model("res/Cerberus_LP.fbx");
+		//model.Scale(glm::vec3(100.0f));
+		Shader basicShader = Shader("res/shaders/Basic.glsl");
+
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_LESS);
+
+		glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
+		glEnable(GL_BLEND);
 
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);
@@ -126,8 +140,9 @@ namespace Cobalt {
 		{
 			// Window background
 			glClearColor(0.0f, 0.0f, 0.1f, 1.0f);
-			glClear(GL_COLOR_BUFFER_BIT);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+			/*
 			camera->OnUpdate(0.0f);
 
 			basicTexShader.Bind();
@@ -137,6 +152,14 @@ namespace Cobalt {
 			cube_VAO.Bind();
 			cube_IBO.Bind();
 			GLCall(glDrawElements(GL_TRIANGLES, cube_IBO.GetCount(), GL_UNSIGNED_INT, nullptr));
+			*/
+
+			camera->OnUpdate(0.0f);
+
+			basicShader.Bind();
+			basicShader.SetUniformMat4("camera", camera->GetCameraMatrix());
+
+			model.Draw(&basicShader);
 
 			m_Window->OnUpdate();
 		}
