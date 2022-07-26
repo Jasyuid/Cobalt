@@ -6,8 +6,8 @@
 #ifndef NDEBUG
 	#if defined(CB_PLATFORM_WINDOWS)
 		#define CB_DEBUGBREAK() __debugbreak()
+		#define CB_ENABLE_ASSERTS
 	#endif
-	#define CB_ENABLE_ASSERTS
 #else
 	#define CB_DEBUGBREAK()
 #endif

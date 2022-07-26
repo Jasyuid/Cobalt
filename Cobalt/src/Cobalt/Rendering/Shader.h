@@ -3,6 +3,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include <unordered_map>
+
 namespace Cobalt
 {
 	// Stores raw shaders

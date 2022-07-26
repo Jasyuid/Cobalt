@@ -15,28 +15,27 @@ namespace Cobalt {
 	Application* Application::s_Instance = nullptr;
 
 	Application::Application()
+		: m_Scene(nullptr)
 	{
 		CB_CORE_ASSERT(!s_Instance, "Application already exists!");
 		s_Instance = this;
 
 		m_Window = std::unique_ptr<Window>(Window::Create());
 		m_Window->SetEventCallback(CB_BIND_EVENT_FN(Application::OnEvent));
-
-		camera = new EditorCamera(glm::vec3(0.0f, 0.0f, 0.0f), 5.0f);
 	}
 
 	Application::~Application()
 	{
 	}
 
-	void Application::PushLayer(Layer* layer)
+	void Application::SwapScene(std::shared_ptr<Scene> s)
 	{
-		m_LayerStack.PushLayer(layer);
-	}
-
-	void Application::PushOverlay(Layer* layer)
-	{
-		m_LayerStack.PushOverlay(layer);
+		if (m_Scene != nullptr)
+		{
+			 
+		}
+		m_Scene = s;
+		CB_CORE_INFO("Scene swapped to '{0}'", s);
 	}
 
 	void Application::OnEvent(Event& e)
@@ -47,7 +46,7 @@ namespace Cobalt {
 
 		if (!e.IsHandled())
 		{
-			camera->OnEvent(e);
+			m_Scene->OnEvent(e);
 			
 			/*
 			if (e.GetEventType() == EventType::KeyPressed)
@@ -123,9 +122,7 @@ namespace Cobalt {
 		basicTexShader.SetUniformInt("diffuse", 0);
 		*/
 
-		Model model = Model("res/Cerberus_LP.fbx");
-		//model.Scale(glm::vec3(100.0f));
-		Shader basicShader = Shader("res/shaders/Basic.glsl");
+		
 
 		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(GL_LESS);
@@ -136,30 +133,34 @@ namespace Cobalt {
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);
 
+		float current_time = (float)glfwGetTime();
+		float last_time = current_time;
+		float delta_time = 0.0f;
+		float total_time = 0.0f;
+		unsigned int frames = 0;
+
 		while (m_Running)
 		{
+			current_time = (float)glfwGetTime();
+			delta_time = current_time - last_time;
+			last_time = current_time;
+
+			total_time += delta_time;
+			frames++;
+			if (total_time >= 1.0f)
+			{
+				total_time -= 1.0f;
+				float frame_time = (int)(1000000.0f / frames) / 1000.0f;
+				CB_CORE_INFO("FPS: {0} ({1} ms)", frames, frame_time);
+				frames = 0;
+			}
+
 			// Window background
 			glClearColor(0.0f, 0.0f, 0.1f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-			/*
-			camera->OnUpdate(0.0f);
-
-			basicTexShader.Bind();
-			basicTexShader.SetUniformMat4("model", cubeModel);
-			basicTexShader.SetUniformMat4("camera", camera->GetCameraMatrix());
-
-			cube_VAO.Bind();
-			cube_IBO.Bind();
-			GLCall(glDrawElements(GL_TRIANGLES, cube_IBO.GetCount(), GL_UNSIGNED_INT, nullptr));
-			*/
-
-			camera->OnUpdate(0.0f);
-
-			basicShader.Bind();
-			basicShader.SetUniformMat4("camera", camera->GetCameraMatrix());
-
-			model.Draw(&basicShader);
+			if (m_Scene != nullptr)
+				m_Scene->OnUpdate(delta_time);
 
 			m_Window->OnUpdate();
 		}
@@ -187,6 +188,10 @@ namespace Cobalt {
 		}
 
 		m_Minimized = false;
+		
+		// TODO: Change the viewport size workflow
+		glViewport(0, 0, e.GetWidth(), e.GetHeight());
+		//camera->SetViewportSize(e.GetWidth(), e.GetHeight());
 
 		return true; // Event handled
 	}

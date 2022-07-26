@@ -9,10 +9,13 @@ namespace Cobalt
 	{
 	public:
 		Scene(const std::string& debugName = "Scene");
-		virtual ~Scene();
+		virtual ~Scene() {};
 		
-		virtual void OnUpdate() {};
-		virtual void OnEvent(Event& event) {};
+		void PushLayer(std::shared_ptr<Layer> l);
+		void PushOverlay(std::shared_ptr<Layer> l);
+
+		virtual void OnEvent(Event& e) {};
+		virtual void OnUpdate(float dt) {};
 
 		inline const std::string& GetName() const { return m_DebugName; }
 

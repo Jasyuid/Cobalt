@@ -18,8 +18,7 @@ namespace Cobalt {
 		Application();
 		virtual ~Application();
 
-		void PushLayer(Layer* layer);
-		void PushOverlay(Layer* layer);
+		void SwapScene(std::shared_ptr<Scene> s);
 
 		void OnEvent(Event& e);
 		
@@ -39,11 +38,9 @@ namespace Cobalt {
 		bool m_Running = true;
 		bool m_Minimized = false;
 
-		LayerStack m_LayerStack;
+		std::shared_ptr<Scene> m_Scene;
 
 		static Application* s_Instance;
-
-		EditorCamera* camera;
 	};
 
 	Application* CreateApplication();

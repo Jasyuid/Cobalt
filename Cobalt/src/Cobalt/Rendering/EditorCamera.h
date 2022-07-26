@@ -52,7 +52,7 @@ namespace Cobalt
 		float ZoomSpeed() const;
 
 	private:
-		float m_FOV = 45.0f, m_AspectRatio = 16.0f/9.0f, m_NearPlane = 0.1f, m_Farplane = 1000.0f; // Default camera values
+		float m_FOV = 45.0f, m_AspectRatio = 16.0f/9.0f, m_NearPlane = 0.1f, m_Farplane = 5000.0f; // Default camera values
 
 		glm::mat4 m_Projection, m_View; // Camera matrices
 		

@@ -9,7 +9,7 @@ namespace Cobalt
 		: m_Focus(focus), m_Distance(distance)
 	{
 		m_Yaw = 0.5*std::acos(0.0);
-		m_Pitch = 0.5*std::acos(0.0);
+		m_Pitch = -0.1*std::acos(0.0);
 		// TODO: Make this not hardcoded
 		m_ViewportWidth = 1280;
 		m_ViewportHeight = 720;
