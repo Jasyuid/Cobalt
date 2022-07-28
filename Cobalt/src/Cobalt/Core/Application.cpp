@@ -32,7 +32,7 @@ namespace Cobalt {
 	{
 		if (m_Scene != nullptr)
 		{
-			 
+			 // TODO: Figure out swapping active scene
 		}
 		m_Scene = s;
 		CB_CORE_INFO("Scene swapped to '{0}'", s);
@@ -44,20 +44,22 @@ namespace Cobalt {
 		dispatcher.Dispatch<WindowCloseEvent>(CB_BIND_EVENT_FN(Application::OnWindowClose));
 		dispatcher.Dispatch<WindowResizeEvent>(CB_BIND_EVENT_FN(Application::OnWindowResize));
 
-		if (!e.IsHandled())
-		{
-			m_Scene->OnEvent(e);
+		if (e.IsHandled())
+			return;
+
+		if (!m_Scene->OnEvent(e))
+			m_Scene->OnLayerEvent(e);
+
 			
-			/*
-			if (e.GetEventType() == EventType::KeyPressed)
+		/*
+		if (e.GetEventType() == EventType::KeyPressed)
+		{
+			if (((KeyPressedEvent*)&e)->GetKeyCode() == CB_KEY_0)
 			{
-				if (((KeyPressedEvent*)&e)->GetKeyCode() == CB_KEY_0)
-				{
-					CB_TRACE("{0}", e);
-				}
+				CB_TRACE("{0}", e);
 			}
-			*/
 		}
+		*/
 	}
 
 	const float cube_vertices[] = {
@@ -160,7 +162,10 @@ namespace Cobalt {
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 			if (m_Scene != nullptr)
+			{
 				m_Scene->OnUpdate(delta_time);
+				m_Scene->OnLayerUpdate(delta_time);
+			}
 
 			m_Window->OnUpdate();
 		}

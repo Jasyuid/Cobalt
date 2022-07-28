@@ -25,7 +25,7 @@ add_library (Cobalt
 	"src/Cobalt/Core/LayerStack.h" 
 	"src/Cobalt/Core/LayerStack.cpp" 
 	"src/Cobalt/Core/Layer.h"
-	"src/Cobalt/Core/Layer.cpp" 
+	 
 	"src/Cobalt/Rendering/OpenGL.h" 
 	"src/Cobalt/Rendering/Buffer.h" 
 	"src/Cobalt/Rendering/Buffer.cpp" 

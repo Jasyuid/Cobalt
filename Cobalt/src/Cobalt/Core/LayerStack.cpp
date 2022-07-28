@@ -37,7 +37,6 @@ namespace Cobalt
 		auto it = std::find(m_Layers.begin(), m_Layers.begin() + m_LayerInsertIndex, layer);
 		if (it != m_Layers.begin() + m_LayerInsertIndex)
 		{
-			// TODO: Do I need to delete layer here, or does called do it?
 			layer->OnDetach();
 			m_Layers.erase(it);
 			m_LayerInsertIndex--;
@@ -54,7 +53,6 @@ namespace Cobalt
 		auto it = std::find(m_Layers.begin() + m_LayerInsertIndex, m_Layers.end(), overlay);
 		if (it != m_Layers.end())
 		{
-			// TODO: Do I need to delete overlay here, or does called do it?
 			overlay->OnDetach();
 			m_Layers.erase(it);
 		}

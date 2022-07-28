@@ -44,7 +44,7 @@ namespace Cobalt {
 			std::stringstream ss;
 			ss << "{" << count << "}";
 			size_t index = m.find(ss.str());
-			// Print error if more argument exist then message slots available
+			// Print error if more arguments exist then message slots available
 			if (index == std::string::npos)
 			{
 				int prev_count = count + 1;

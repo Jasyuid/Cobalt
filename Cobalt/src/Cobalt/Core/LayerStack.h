@@ -12,6 +12,7 @@ namespace Cobalt
 		LayerStack();
 		~LayerStack();
 
+		// Push and pop functions for layer stack
 		void PushLayer(std::shared_ptr<Layer> layer);
 		void PushOverlay(std::shared_ptr<Layer> overlay);
 		void PopLayer(std::shared_ptr<Layer> layer);

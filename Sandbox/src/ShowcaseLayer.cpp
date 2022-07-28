@@ -25,9 +25,10 @@ void ShowcaseLayer::OnDetach()
 
 }
 
-void ShowcaseLayer::OnEvent(Cobalt::Event& e)
+bool ShowcaseLayer::OnEvent(Cobalt::Event& e)
 {
 	camera->OnEvent(e);
+	return e.IsHandled();
 }
 
 void ShowcaseLayer::OnUpdate(float dt)

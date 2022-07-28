@@ -11,7 +11,7 @@ public:
 	void OnAttach() override;
 	void OnDetach() override;
 	
-	void OnEvent(Cobalt::Event& e) override;
+	bool OnEvent(Cobalt::Event& e) override;
 	void OnUpdate(float dt) override;
 
 private:

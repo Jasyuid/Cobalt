@@ -12,24 +12,12 @@ TestScene::~TestScene()
 {
 }
 
-void TestScene::OnEvent(Cobalt::Event& e)
+bool TestScene::OnEvent(Cobalt::Event& e)
 {
-	auto l = m_LayerStack.begin();
-	auto end = m_LayerStack.end();
-	while (l != end)
-	{
-		l->get()->OnEvent(e);
-		l++;
-	}
+	return e.IsHandled();
 }
 
 void TestScene::OnUpdate(float dt)
 {
-	auto l = m_LayerStack.begin();
-	auto end = m_LayerStack.end();
-	while (l != end)
-	{
-		l->get()->OnUpdate(dt);
-		l++;
-	}
+	
 }
