@@ -17,7 +17,7 @@ namespace Cobalt
 	class Shader
 	{
 	public:
-		Shader(const std::string& filepath); // TODO: Allow differant files for each shader type
+		Shader(const std::string& filepath);
 		~Shader();
 
 		// Bind functions

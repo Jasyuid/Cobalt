@@ -9,3 +9,9 @@ add_executable(Sandbox
 	"src/TestScene.h" "src/TestScene.cpp" "src/ShowcaseLayer.h" "src/ShowcaseLayer.cpp")
 
 target_link_libraries(Sandbox PUBLIC Cobalt) 
+
+# Temporary solution for updating res folder in build directory
+add_custom_target(copy_assets COMMAND ${CMAKE_COMMAND} -E copy_directory 
+					${CMAKE_CURRENT_LIST_DIR}/res ${CMAKE_CURRENT_BINARY_DIR}/res)
+
+add_dependencies(Sandbox copy_assets)

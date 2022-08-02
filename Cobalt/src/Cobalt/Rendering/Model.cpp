@@ -3,7 +3,7 @@
 
 namespace Cobalt
 {
-	Model::Model(const std::string& filename, Material* material)
+	Model::Model(const std::string& filename, std::shared_ptr<Material> material)
 		: m_ModelMat(glm::mat4(1.0f)), m_Material(material), m_Transpose(glm::mat4(1.0f)), 
 			m_Rotation(glm::mat4(1.0f)), m_Scale(glm::mat4(1.0)), m_Position(glm::vec3(0.0f))
 	{
@@ -101,9 +101,6 @@ namespace Cobalt
 			layout.Push<float>(2);
 
 			m_Meshes.push_back(new Mesh(vertices.data(), vertices.size(), layout, indicies.data(), indicies.size(), m_Material));
-
-			// TODO: Texture stuff
-
 		}
 
 		for (unsigned int i = 0; i < node->mNumChildren; i++)

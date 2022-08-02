@@ -19,13 +19,14 @@ void ShowcaseLayer::OnAttach()
 	Cobalt::Shader* shader = new Cobalt::Shader("res/shaders/Basic.glsl");
 	Cobalt::Shader* tex_shader = new Cobalt::Shader("res/shaders/BasicTexture.glsl");
 
-	mat = new Cobalt::BasicMaterial(shader);
-	tex_mat = new Cobalt::TextureMaterial(tex_shader, tex);
+	mat = std::shared_ptr<Cobalt::Material>(new Cobalt::BasicMaterial(shader));
+	tex_mat = std::shared_ptr<Cobalt::Material>(new Cobalt::TextureMaterial(tex_shader, tex));
 
 	model = new Cobalt::Model("res/Cerberus/Cerberus_LP.fbx", tex_mat);
 	model->Scale(glm::vec3(0.1f));
 	model->Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 
+	light = new Cobalt::Light(glm::vec3(10.0f), glm::vec3(1.0f));
 }
 
 void ShowcaseLayer::OnDetach()

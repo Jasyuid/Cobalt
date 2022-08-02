@@ -2,6 +2,8 @@
 
 #include "Cobalt.h"
 
+#include "Cobalt/Rendering/Light.h"
+
 class ShowcaseLayer : public Cobalt::Layer
 {
 public:
@@ -18,6 +20,8 @@ private:
 	Cobalt::Model* model;
 	Cobalt::EditorCamera* camera;
 
-	Cobalt::Material* mat;
-	Cobalt::Material* tex_mat;
+	std::shared_ptr<Cobalt::Material> mat;
+	std::shared_ptr<Cobalt::Material> tex_mat;
+
+	Cobalt::Light* light;
 };

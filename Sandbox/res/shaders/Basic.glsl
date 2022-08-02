@@ -28,5 +28,5 @@ in vec3 fragPos;
 
 void main()
 {
-	color = vec4(fragColor, 1.0);
+	color = vec4(fragColor / vec3(2.0), 1.0);
 };

@@ -5,7 +5,7 @@
 
 namespace Cobalt
 {
-	Mesh::Mesh(const float* v_data, unsigned int v_count, const VertexBufferLayout& layout, const unsigned int* i_data, unsigned int i_count, Material* material)
+	Mesh::Mesh(const float* v_data, unsigned int v_count, const VertexBufferLayout& layout, const unsigned int* i_data, unsigned int i_count, std::shared_ptr<Material> material)
 		: m_VAO(), m_VBO(v_data, v_count * sizeof(float)), m_IBO(i_data, i_count)
 	{
 		m_VAO.AddBuffer(m_VBO, layout);
@@ -15,7 +15,7 @@ namespace Cobalt
 	{
 	}
 
-	void Mesh::Draw(Material* material)
+	void Mesh::Draw(std::shared_ptr<Material> material)
 	{
 		material->Bind();
 		

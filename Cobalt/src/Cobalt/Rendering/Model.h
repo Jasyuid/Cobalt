@@ -11,7 +11,7 @@ namespace Cobalt
 	class Model
 	{
 	public:
-		Model(const std::string& filename, Material* material);
+		Model(const std::string& filename, std::shared_ptr<Material> material);
 		~Model();
 
 		void Translate(const glm::vec3& move);
@@ -20,8 +20,8 @@ namespace Cobalt
 
 		void Draw();
 
-		inline const Material* GetMaterial() const { return m_Material; };
-		inline void SetMaterial(Material* mat) { m_Material = mat; }
+		inline const std::shared_ptr<Material> GetMaterial() const { return m_Material; };
+		inline void SetMaterial(std::shared_ptr<Material> mat) { m_Material = mat; }
 
 	private:
 		void LoadModel(const std::string& filename);
@@ -30,7 +30,7 @@ namespace Cobalt
 	private:
 		std::vector<Mesh*> m_Meshes;
 
-		Material* m_Material;
+		std::shared_ptr<Material> m_Material;
 
 		glm::mat4 m_ModelMat;
 		glm::mat4 m_Transpose;

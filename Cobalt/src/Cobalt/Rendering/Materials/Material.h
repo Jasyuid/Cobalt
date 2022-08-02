@@ -42,4 +42,15 @@ namespace Cobalt
 	protected:
 		Texture* m_Texture;
 	};
+
+	class PBRMaterial : public Material
+	{
+	public:
+		PBRMaterial(Shader* shader, Texture* albedo, Texture* normal, Texture* rough, Texture* metal, Texture* ao);
+		~PBRMaterial();
+
+		void Bind() const override;
+	protected:
+		TextureMap m_Textures;
+	};
 }

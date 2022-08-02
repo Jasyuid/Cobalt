@@ -3,8 +3,6 @@
 
 namespace Cobalt
 {
-	// TODO: Move this to layer stack
-
 	// Push a layer to the layer stack
 	void Scene::PushLayer(std::shared_ptr<Layer> l)
 	{

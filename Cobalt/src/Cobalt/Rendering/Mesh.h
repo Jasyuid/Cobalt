@@ -10,10 +10,10 @@ namespace Cobalt
 	class Mesh
 	{
 	public:
-		Mesh(const float* v_data, unsigned int v_count, const VertexBufferLayout& layout, const unsigned int* i_data, unsigned int i_count, Material* material);
+		Mesh(const float* v_data, unsigned int v_count, const VertexBufferLayout& layout, const unsigned int* i_data, unsigned int i_count, std::shared_ptr<Material>);
 		~Mesh();
 
-		void Draw(Material* material);
+		void Draw(std::shared_ptr<Material> material);
 
 	private:
 		VertexArray m_VAO; // Mesh vertex array
