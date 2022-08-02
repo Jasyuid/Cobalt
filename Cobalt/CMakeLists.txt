@@ -44,7 +44,9 @@ add_library (Cobalt
 	"src/Cobalt/Core/Scene.h" 
 	"src/Cobalt/Core/Scene.cpp" 
 	"src/Cobalt/Rendering/Model.h" 
-	"src/Cobalt/Rendering/Model.cpp")
+	"src/Cobalt/Rendering/Model.cpp" 
+	"src/Cobalt/Rendering/Materials/Material.h"   
+	"src/Cobalt/Rendering/Materials/Material.cpp" )
 
 target_include_directories(Cobalt PUBLIC "${PROJECT_SOURCE_DIR}/Cobalt/src")
 

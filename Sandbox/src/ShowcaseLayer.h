@@ -16,7 +16,8 @@ public:
 
 private:
 	Cobalt::Model* model;
-	Cobalt::Shader* shader;
 	Cobalt::EditorCamera* camera;
 
+	Cobalt::Material* mat;
+	Cobalt::Material* tex_mat;
 };

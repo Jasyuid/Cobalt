@@ -3,8 +3,9 @@
 
 namespace Cobalt
 {
-	Model::Model(const std::string& filename)
-		: m_ModelMat(glm::mat4(1.0f)), m_Transpose(glm::mat4(1.0f)), m_Rotation(glm::mat4(1.0f)), m_Scale(glm::mat4(1.0)), m_Position(glm::vec3(0.0f))
+	Model::Model(const std::string& filename, Material* material)
+		: m_ModelMat(glm::mat4(1.0f)), m_Material(material), m_Transpose(glm::mat4(1.0f)), 
+			m_Rotation(glm::mat4(1.0f)), m_Scale(glm::mat4(1.0)), m_Position(glm::vec3(0.0f))
 	{
 		LoadModel(filename);
 	}
@@ -30,16 +31,16 @@ namespace Cobalt
 		m_Scale = glm::scale(scale) * m_Scale;
 	}
 
-	void Model::Draw(Shader* shader)
+	void Model::Draw()
 	{
 		m_ModelMat = m_Transpose * m_Rotation * m_Scale;
 		
-		shader->Bind();
-		shader->SetUniformMat4("model", m_ModelMat);
+		m_Material->GetShader()->Bind();
+		m_Material->GetShader()->SetUniformMat4("model", m_ModelMat);
 
 		for (Mesh* m : m_Meshes)
 		{
-			m->Draw(shader);
+			m->Draw(m_Material);
 		}
 	}
 
@@ -47,7 +48,7 @@ namespace Cobalt
 	{
 		Assimp::Importer importer;
 		const aiScene* scene = importer.ReadFile(filename, aiProcess_Triangulate | aiProcess_CalcTangentSpace | aiProcess_JoinIdenticalVertices | 
-													aiProcess_ImproveCacheLocality | aiProcess_SortByPType | aiProcess_OptimizeMeshes | aiProcess_OptimizeGraph);
+													aiProcess_ImproveCacheLocality | aiProcess_SortByPType | aiProcess_OptimizeMeshes | aiProcess_OptimizeGraph | aiProcess_FlipUVs);
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 		{
 			CB_ERROR("Failed to load model: {0}!", filename);
@@ -59,14 +60,13 @@ namespace Cobalt
 
 	void Model::ProcessNode(const aiNode* node, const aiScene* scene)
 	{
-		CB_TRACE("{0}", node->mNumMeshes);
+		//CB_TRACE("{0}", node->mNumMeshes);
 		for (unsigned int i = 0; i < node->mNumMeshes; i++)
 		{
 			aiMesh* ai_mesh = scene->mMeshes[node->mMeshes[i]];
 
 			std::vector<float> vertices;
 			std::vector<unsigned int> indicies;
-			TextureMap textures;
 
 			// Load vertex data
 			for (unsigned int j = 0; j < ai_mesh->mNumVertices; j++)
@@ -100,7 +100,7 @@ namespace Cobalt
 			layout.Push<float>(3);
 			layout.Push<float>(2);
 
-			m_Meshes.push_back(new Mesh(vertices.data(), vertices.size(), layout, indicies.data(), indicies.size(), textures));
+			m_Meshes.push_back(new Mesh(vertices.data(), vertices.size(), layout, indicies.data(), indicies.size(), m_Material));
 
 			// TODO: Texture stuff
 
@@ -110,11 +110,6 @@ namespace Cobalt
 		{
 			ProcessNode(node->mChildren[i], scene);
 		}
-	}
-
-	Texture* Model::LoadTexture(aiMaterial* mat, aiTextureType type)
-	{
-		return nullptr;
 	}
 
 }

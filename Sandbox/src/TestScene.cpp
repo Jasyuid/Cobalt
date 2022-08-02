@@ -12,6 +12,16 @@ TestScene::~TestScene()
 {
 }
 
+void TestScene::OnAdd()
+{
+
+}
+
+void TestScene::OnRemove()
+{
+
+}
+
 bool TestScene::OnEvent(Cobalt::Event& e)
 {
 	return e.IsHandled();

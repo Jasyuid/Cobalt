@@ -3,15 +3,17 @@
 #include <iostream>
 
 // Core log macros
-#define CB_CORE_TRACE(s, ...)	::Cobalt::Logger::formatMessage(0, Cobalt::LogSource::Core + Cobalt::LogCategory::Trace, s, __VA_ARGS__)
 #define CB_CORE_INFO(s, ...)	::Cobalt::Logger::formatMessage(0, Cobalt::LogSource::Core + Cobalt::LogCategory::Info, s, __VA_ARGS__)
+#define CB_CORE_TRACE(s, ...)	::Cobalt::Logger::formatMessage(0, Cobalt::LogSource::Core + Cobalt::LogCategory::Trace, s, __VA_ARGS__)
+#define CB_CORE_LOAD(s, ...)	::Cobalt::Logger::formatMessage(0, Cobalt::LogSource::Core + Cobalt::LogCategory::Load, s, __VA_ARGS__)
 #define CB_CORE_WARN(s, ...)	::Cobalt::Logger::formatMessage(0, Cobalt::LogSource::Core + Cobalt::LogCategory::Warn, s, __VA_ARGS__)
 #define CB_CORE_ERROR(s, ...)	::Cobalt::Logger::formatMessage(0, Cobalt::LogSource::Core + Cobalt::LogCategory::Error, s, __VA_ARGS__)
 #define CB_CORE_FATAL(s, ...)	::Cobalt::Logger::formatMessage(0, Cobalt::LogSource::Core + Cobalt::LogCategory::Fatal, s, __VA_ARGS__)
 
 // Client log macros
-#define CB_TRACE(s, ...)		::Cobalt::Logger::formatMessage(0, Cobalt::LogSource::App + Cobalt::LogCategory::Trace, s, __VA_ARGS__)
 #define CB_INFO(s, ...)			::Cobalt::Logger::formatMessage(0, Cobalt::LogSource::App + Cobalt::LogCategory::Info, s, __VA_ARGS__)
+#define CB_TRACE(s, ...)		::Cobalt::Logger::formatMessage(0, Cobalt::LogSource::App + Cobalt::LogCategory::Trace, s, __VA_ARGS__)
+#define CB_LOAD(s, ...)			::Cobalt::Logger::formatMessage(0, Cobalt::LogSource::App + Cobalt::LogCategory::Load, s, __VA_ARGS__)
 #define CB_WARN(s, ...)			::Cobalt::Logger::formatMessage(0, Cobalt::LogSource::App + Cobalt::LogCategory::Warn, s, __VA_ARGS__)
 #define CB_ERROR(s, ...)		::Cobalt::Logger::formatMessage(0, Cobalt::LogSource::App + Cobalt::LogCategory::Error, s, __VA_ARGS__)
 #define CB_FATAL(s, ...)		::Cobalt::Logger::formatMessage(0, Cobalt::LogSource::App + Cobalt::LogCategory::Fatal, s, __VA_ARGS__)
@@ -21,11 +23,12 @@ namespace Cobalt {
 	// Log categories
 	enum LogCategory
 	{
-		Trace = 0x1,
-		Info = 0x2,
-		Warn = 0x3,
-		Error = 0x4,
-		Fatal = 0x5
+		Info = 0x1,
+		Trace = 0x2,
+		Load = 0x3,
+		Warn = 0x4,
+		Error = 0x5,
+		Fatal = 0x6
 	};
 
 	// Log sources

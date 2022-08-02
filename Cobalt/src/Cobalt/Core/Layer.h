@@ -12,11 +12,11 @@ namespace Cobalt
 			: m_DebugName(debugName) {};
 		virtual ~Layer() {};
 
-		virtual void OnAttach() {};
-		virtual void OnDetach() {};
+		virtual void OnAttach() = 0;
+		virtual void OnDetach() = 0;
 		
-		virtual bool OnEvent(Event& event) { return false; };
-		virtual void OnUpdate(float dt) {};
+		virtual bool OnEvent(Event& event) = 0;
+		virtual void OnUpdate(float dt) = 0;
 
 		inline const std::string& GetName() const { return m_DebugName; }
 

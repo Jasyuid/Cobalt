@@ -33,9 +33,11 @@ namespace Cobalt {
 		if (m_Scene != nullptr)
 		{
 			 // TODO: Figure out swapping active scene
+			m_Scene->OnRemove();
 		}
 		m_Scene = s;
-		CB_CORE_INFO("Scene swapped to '{0}'", s);
+		CB_LOAD("Scene swapped to '{0}'", s);
+		m_Scene->OnAdd();
 	}
 
 	void Application::OnEvent(Event& e)
@@ -44,22 +46,30 @@ namespace Cobalt {
 		dispatcher.Dispatch<WindowCloseEvent>(CB_BIND_EVENT_FN(Application::OnWindowClose));
 		dispatcher.Dispatch<WindowResizeEvent>(CB_BIND_EVENT_FN(Application::OnWindowResize));
 
+		if (e.GetEventType() == EventType::KeyReleased)
+		{
+			if (((KeyReleasedEvent*)&e)->GetKeyCode() == CB_KEY_V)
+			{
+				if (m_Window->IsVSync())
+				{
+					m_Window->SetVSync(false);
+					CB_CORE_INFO("Disabled VSync.");
+				}
+				else
+				{
+					m_Window->SetVSync(true);
+					CB_CORE_INFO("Enabled VSync.");
+				}
+					
+			}
+		}
+
 		if (e.IsHandled())
 			return;
 
 		if (!m_Scene->OnEvent(e))
 			m_Scene->OnLayerEvent(e);
 
-			
-		/*
-		if (e.GetEventType() == EventType::KeyPressed)
-		{
-			if (((KeyPressedEvent*)&e)->GetKeyCode() == CB_KEY_0)
-			{
-				CB_TRACE("{0}", e);
-			}
-		}
-		*/
 	}
 
 	const float cube_vertices[] = {
@@ -124,8 +134,6 @@ namespace Cobalt {
 		basicTexShader.SetUniformInt("diffuse", 0);
 		*/
 
-		
-
 		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(GL_LESS);
 
@@ -153,7 +161,7 @@ namespace Cobalt {
 			{
 				total_time -= 1.0f;
 				float frame_time = (int)(1000000.0f / frames) / 1000.0f;
-				CB_CORE_INFO("FPS: {0} ({1} ms)", frames, frame_time);
+				CB_INFO("FPS: {0} ({1} ms)", frames, frame_time);
 				frames = 0;
 			}
 
@@ -184,11 +192,10 @@ namespace Cobalt {
 
 	bool Application::OnWindowResize(WindowResizeEvent& e)
 	{
-		CB_CORE_TRACE("({0}, {1})", e.GetWidth(), e.GetHeight());
-
 		if (e.GetWidth() == 0 || e.GetHeight() == 0)
 		{
 			m_Minimized = true;
+			CB_CORE_INFO("Window minimized.");
 			return false;
 		}
 
@@ -197,6 +204,8 @@ namespace Cobalt {
 		// TODO: Change the viewport size workflow
 		glViewport(0, 0, e.GetWidth(), e.GetHeight());
 		//camera->SetViewportSize(e.GetWidth(), e.GetHeight());
+
+		CB_CORE_INFO("Window resized: ({0}, {1})", e.GetWidth(), e.GetHeight());
 
 		return true; // Event handled
 	}

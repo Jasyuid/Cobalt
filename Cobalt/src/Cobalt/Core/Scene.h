@@ -19,6 +19,9 @@ namespace Cobalt
 		void PopLayer(std::shared_ptr<Layer> l);
 		void PopOverlay(std::shared_ptr<Layer> l);
 
+		virtual void OnAdd() {};
+		virtual void OnRemove() {};
+
 		virtual bool OnEvent(Event& e) { return false; };
 		virtual void OnUpdate(float dt) {};
 		

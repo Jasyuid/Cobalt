@@ -34,13 +34,15 @@ namespace Cobalt {
 		};
 
 		// Map containing all console color codes
-		std::unordered_map<unsigned int, unsigned int> log_colors = { {Core + Trace, FG_GREEN},
-																		{Core + Info, FG_WHITE},
+		std::unordered_map<unsigned int, unsigned int> log_colors = { {Core + Info, FG_WHITE},
+																		{Core + Trace, FG_GREEN},
+																		{Core + Load, FG_LIGHTBLUE},
 																		{Core + Warn, FG_YELLOW},
 																		{Core + Error, FG_LIGHTRED},
 																		{Core + Fatal, FG_RED},
-																		{App + Trace, FG_GREEN},
 																		{App + Info, FG_WHITE},
+																		{App + Trace, FG_GREEN},
+																		{App + Load, FG_LIGHTBLUE},
 																		{App + Warn, FG_YELLOW},
 																		{App + Error, FG_LIGHTRED},
 																		{App + Fatal, FG_RED} };
