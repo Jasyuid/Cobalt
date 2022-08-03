@@ -42,6 +42,27 @@ namespace Cobalt
 	}
 
 	///////////////////////////////////////////////////////////////////////////////
+	// COLOR MATERIAL
+	///////////////////////////////////////////////////////////////////////////////
+
+	ColorMaterial::ColorMaterial(Shader* shader, glm::vec3 albedo, float rough, float metal, float ao)
+		: Material(shader), m_Albedo(albedo), m_Rough(rough), m_Metal(metal), m_AO(ao)
+	{
+	}
+
+	ColorMaterial::~ColorMaterial()
+	{
+	}
+
+	void ColorMaterial::Bind() const
+	{
+		m_Shader->SetUniformFloat3("albedo", m_Albedo);
+		m_Shader->SetUniformFloat("roughness", m_Rough);
+		m_Shader->SetUniformFloat("metallic", m_Metal);
+		m_Shader->SetUniformFloat("ao", m_AO);
+	}
+
+	///////////////////////////////////////////////////////////////////////////////
 	// PBR MATERIAL
 	///////////////////////////////////////////////////////////////////////////////
 
@@ -50,8 +71,8 @@ namespace Cobalt
 	{
 		m_Textures.emplace("albedo", albedo);
 		m_Textures.emplace("normal", normal);
-		m_Textures.emplace("rough", rough);
-		m_Textures.emplace("metal", metal);
+		m_Textures.emplace("roughness", rough);
+		m_Textures.emplace("metallic", metal);
 		m_Textures.emplace("ao", ao);
 	}
 
@@ -63,13 +84,13 @@ namespace Cobalt
 	{
 		m_Textures.at("albedo")->Bind(0);
 		m_Textures.at("normal")->Bind(1);
-		m_Textures.at("rough")->Bind(2);
-		m_Textures.at("metal")->Bind(3);
+		m_Textures.at("roughness")->Bind(2);
+		m_Textures.at("metallic")->Bind(3);
 		m_Textures.at("ao")->Bind(4);
 		m_Shader->SetUniformInt("albedo", 0);
 		m_Shader->SetUniformInt("normal", 1);
-		m_Shader->SetUniformInt("rough", 2);
-		m_Shader->SetUniformInt("metal", 3);
+		m_Shader->SetUniformInt("roughness", 2);
+		m_Shader->SetUniformInt("metallic", 3);
 		m_Shader->SetUniformInt("ao", 4);
 	}
 }

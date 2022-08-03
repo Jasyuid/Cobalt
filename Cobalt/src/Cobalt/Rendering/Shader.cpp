@@ -5,11 +5,11 @@
 
 namespace Cobalt
 {
-	Shader::Shader(const std::string& filepath)
-		: m_RendererID(0), m_FilePath(filepath)
+	Shader::Shader(const std::string& vertpath, const std::string& fragpath)
+		: m_RendererID(0), m_VertFilePath(vertpath), m_FragFilePath(fragpath)
 	{
 		// Load and parse shader source file
-		ShaderSource source = ParseShader(filepath);
+		ShaderSource source = { ParseShader(vertpath), ParseShader(fragpath) };
 		// Create shader from shader source
 		m_RendererID = CreateShader(source.VertexSource, source.FragmentSource);
 	}
@@ -19,39 +19,21 @@ namespace Cobalt
 		GLCall(glDeleteProgram(m_RendererID));
 	}
 
-	ShaderSource Shader::ParseShader(const std::string& filepath)
+	const std::string Shader::ParseShader(const std::string& filepath)
 	{
 		// Open file stream
 		std::ifstream stream(filepath);
 
-		// Shader types
-		enum class ShaderType
-		{
-			NONE = -1, VERTEX = 0, FRAGMENT = 1
-		};
-
 		// Go through each line of shader file
 		std::string line;
-		std::stringstream ss[2];
-		ShaderType type = ShaderType::NONE;
+		std::stringstream ss;
 		while (getline(stream, line))
 		{
-			// Check if the shader type has changed
-			if (line.find("#SHADER") != std::string::npos)
-			{
-				if (line.find("VERTEX") != std::string::npos)
-					type = ShaderType::VERTEX;
-				else if (line.find("FRAGMENT") != std::string::npos)
-					type = ShaderType::FRAGMENT;
-			}
-			else
-			{
-				// Print line to current shader type
-				ss[(int)type] << line << '\n';
-			}
+			// Print line to current shader type
+			ss << line << '\n';
 		}
 
-		return { ss[0].str(), ss[1].str() };
+		return ss.str();
 	}
 
 	unsigned int Shader::CreateShader(const std::string& vertexShader, const std::string& fragmentShader)
@@ -143,7 +125,7 @@ namespace Cobalt
 		// Find and store the location of the uniform
 		GLCall(int location = glGetUniformLocation(m_RendererID, name.c_str()));
 		if (location == -1)
-			CB_CORE_WARN("Uniform '{0}' does not exist!", name);
+			CB_WARN("Uniform '{0}' does not exist!", name);
 
 		m_UniformLocations[name] = location;
 		return location;

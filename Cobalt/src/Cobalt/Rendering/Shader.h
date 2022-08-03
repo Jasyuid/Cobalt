@@ -17,7 +17,7 @@ namespace Cobalt
 	class Shader
 	{
 	public:
-		Shader(const std::string& filepath);
+		Shader(const std::string& vertpath, const std::string& fragpath);
 		~Shader();
 
 		// Bind functions
@@ -33,7 +33,7 @@ namespace Cobalt
 
 	private:
 		// Create shaders from source files
-		ShaderSource ParseShader(const std::string& filepath);
+		const std::string ParseShader(const std::string& filepath);
 		unsigned int CompileShader(unsigned int type, const std::string& source);
 		unsigned int CreateShader(const std::string& vertexShader, const std::string& fragmentShader);
 
@@ -42,7 +42,8 @@ namespace Cobalt
 
 	private:
 		unsigned int m_RendererID; // Shader ID
-		std::string m_FilePath; // File path for debugging purposes
+		std::string m_VertFilePath; // Vertex shader file path for debugging purposes
+		std::string m_FragFilePath; // Fragment shader file path for debugging purposes
 
 		std::unordered_map<std::string, int> m_UniformLocations; // Store uniform locations previously looked up
 	};

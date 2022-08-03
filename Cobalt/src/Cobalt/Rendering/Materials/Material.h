@@ -39,8 +39,20 @@ namespace Cobalt
 		~TextureMaterial();
 
 		void Bind() const override;
-	protected:
+	private:
 		Texture* m_Texture;
+	};
+
+	class ColorMaterial : public Material
+	{
+	public:
+		ColorMaterial(Shader* shader, glm::vec3 albedo, float rough, float metal, float ao);
+		~ColorMaterial();
+
+		void Bind() const override;
+	private:
+		glm::vec3 m_Albedo;
+		float m_Rough, m_Metal, m_AO;
 	};
 
 	class PBRMaterial : public Material
@@ -50,7 +62,7 @@ namespace Cobalt
 		~PBRMaterial();
 
 		void Bind() const override;
-	protected:
+	private:
 		TextureMap m_Textures;
 	};
 }

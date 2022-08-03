@@ -22,6 +22,7 @@ private:
 
 	std::shared_ptr<Cobalt::Material> mat;
 	std::shared_ptr<Cobalt::Material> tex_mat;
+	std::shared_ptr<Cobalt::Material> texl_mat;
 
 	Cobalt::Light* light;
 };
