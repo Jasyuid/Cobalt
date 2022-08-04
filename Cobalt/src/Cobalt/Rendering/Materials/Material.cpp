@@ -87,10 +87,10 @@ namespace Cobalt
 		m_Textures.at("roughness")->Bind(2);
 		m_Textures.at("metallic")->Bind(3);
 		m_Textures.at("ao")->Bind(4);
-		m_Shader->SetUniformInt("albedo", 0);
-		m_Shader->SetUniformInt("normal", 1);
-		m_Shader->SetUniformInt("roughness", 2);
-		m_Shader->SetUniformInt("metallic", 3);
-		m_Shader->SetUniformInt("ao", 4);
+		m_Shader->SetUniformInt("albedoTex", 0);
+		m_Shader->SetUniformInt("normalTex", 1);
+		m_Shader->SetUniformInt("roughnessTex", 2);
+		m_Shader->SetUniformInt("metallicTex", 3);
+		m_Shader->SetUniformInt("aoTex", 4);
 	}
 }
