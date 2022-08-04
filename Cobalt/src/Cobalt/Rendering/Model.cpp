@@ -3,12 +3,12 @@
 
 namespace Cobalt
 {
-	Model::Model(const std::string& filename, std::shared_ptr<Material> material)
+	Model::Model(const std::string& filename, std::shared_ptr<Material> material, const bool gen_tangents)
 		: m_ModelMat(glm::mat4(1.0f)), m_Material(material), m_Transpose(glm::mat4(1.0f)), 
 			m_Rotation(glm::mat4(1.0f)), m_Scale(glm::mat4(1.0)), m_Position(glm::vec3(0.0f))
 	{
 		// Use assimp to load model vertices from file
-		LoadModel(filename);
+		LoadModel(filename, gen_tangents);
 	}
 
 	Model::Model(Mesh* m, std::shared_ptr<Material> material)
@@ -56,7 +56,7 @@ namespace Cobalt
 		}
 	}
 
-	void Model::LoadModel(const std::string& filename)
+	void Model::LoadModel(const std::string& filename, const bool gen_tangents)
 	{
 		// Import model using assimp
 		Assimp::Importer importer;
@@ -69,10 +69,10 @@ namespace Cobalt
 		}
 
 		// Process each mesh node from assimp
-		ProcessNode(scene->mRootNode, scene);
+		ProcessNode(scene->mRootNode, scene, gen_tangents);
 	}
 
-	void Model::ProcessNode(const aiNode* node, const aiScene* scene)
+	void Model::ProcessNode(const aiNode* node, const aiScene* scene, const bool gen_tangents)
 	{
 		// Loop through each mesh at current node
 		for (unsigned int i = 0; i < node->mNumMeshes; i++)
@@ -98,6 +98,17 @@ namespace Cobalt
 				// Texture coordinates
 				vertices.push_back((float)ai_mesh->mTextureCoords[0][j].x);
 				vertices.push_back((float)ai_mesh->mTextureCoords[0][j].y);
+				if (gen_tangents)
+				{
+					// Tangent vertices
+					vertices.push_back((float)ai_mesh->mTangents[i].x);
+					vertices.push_back((float)ai_mesh->mTangents[i].y);
+					vertices.push_back((float)ai_mesh->mTangents[i].z);
+					// Bitangent vertices
+					vertices.push_back((float)ai_mesh->mBitangents[i].x);
+					vertices.push_back((float)ai_mesh->mBitangents[i].y);
+					vertices.push_back((float)ai_mesh->mBitangents[i].z);
+				}
 			}
 
 			// Load index data
@@ -112,10 +123,16 @@ namespace Cobalt
 			}
 
 			// TODO: Something else here
+			// Set vertex layout
 			VertexBufferLayout layout;
 			layout.Push<float>(3);
 			layout.Push<float>(3);
 			layout.Push<float>(2);
+			if (gen_tangents)
+			{
+				layout.Push<float>(3);
+				layout.Push<float>(3);
+			}
 
 			// TODO: Make these smart pointers
 			// Push mesh to mesh stack
@@ -125,77 +142,126 @@ namespace Cobalt
 		// Process child nodes if they exist
 		for (unsigned int i = 0; i < node->mNumChildren; i++)
 		{
-			ProcessNode(node->mChildren[i], scene);
+			ProcessNode(node->mChildren[i], scene, gen_tangents);
 		}
 	}
 
-	Model* Model::CreateSphere(std::shared_ptr<Material> material, unsigned int segments)
+	Model* Model::CreateSphere(std::shared_ptr<Material> material, unsigned int segments, const bool gen_tangents)
 	{
 		// Store vertex and index data
 		std::vector<float> vertices;
 		std::vector<unsigned int> indicies;
 
+		std::vector<glm::vec3> vertex_data;
+		std::vector<glm::vec3> normal_data;
+		std::vector<glm::vec2> tc_data;
+
+		std::vector<std::vector<glm::vec3>> tangents;
+		std::vector<std::vector<glm::vec3>> bitangents;
+
+		// Create a grid of vertices
 		for (unsigned int y = 0; y < segments; ++y)
 		{
 			for (unsigned int x = 0; x < segments; ++x)
 			{
+				// Calculate segment for texture mapping
 				float x_segment = (float)x / (float)(segments-1);
 				float y_segment = (float)y / (float)(segments-1);
+				// Calculate location on unit sphere
 				float x_pos = glm::cos(x_segment * 2.0f*glm::pi<float>()) * glm::sin(y_segment * glm::pi<float>());
 				float y_pos = glm::cos(y_segment * glm::pi<float>());
 				float z_pos = glm::sin(x_segment * 2.0f*glm::pi<float>()) * glm::sin(y_segment * glm::pi<float>());
 				
 				// Position
-				vertices.push_back(x_pos);
-				vertices.push_back(y_pos);
-				vertices.push_back(z_pos);
+				vertex_data.push_back(glm::vec3(x_pos, y_pos, z_pos));
 				// Normal
-				vertices.push_back(x_pos);
-				vertices.push_back(y_pos);
-				vertices.push_back(z_pos);
+				normal_data.push_back(glm::vec3(x_pos, y_pos, z_pos));
 				// Texture Coordinate
-				vertices.push_back(x_segment);
-				vertices.push_back(y_segment);
+				tc_data.push_back(glm::vec2(x_segment, y_segment));
 
-				if (y == 0 || y == segments - 1)
-					break;
+				std::vector<glm::vec3> v;
+				tangents.push_back(v);
+				bitangents.push_back(v);
 			}
-		}
+		}		
 
 		for(unsigned int y = 0; y < segments - 1; ++y)
 		{
-			if (y == 0)
+			for (unsigned int x = 0; x < segments; ++x)
 			{
-				for (unsigned int x = 0; x < segments; ++x)
-				{
-					indicies.push_back(y * (segments));
-					indicies.push_back((y + 1) * (segments)+((x + 1) % segments));
-					indicies.push_back((y + 1) * (segments)+x);
-				}
-			}
-			else if (y == segments - 2)
-			{
-				for (unsigned int x = 0; x < segments; ++x)
-				{
-					indicies.push_back(y * (segments)+x - (segments-1));
-					indicies.push_back(y * (segments)+((x + 1) % segments) - (segments - 1));
-					indicies.push_back((y + 1) * (segments)-(segments - 1));
+				unsigned int v1 = y * (segments) + x;
+				unsigned int v2 = y * (segments) + ((x + 1) % segments);
+				unsigned int v3 = (y + 1) * (segments) + x;
+				unsigned int v4 = (y + 1) * (segments)+((x + 1) % segments);
 
-				}
-			}
-			else
-			{
-				for (unsigned int x = 0; x < segments; ++x)
-				{
-					indicies.push_back(y * (segments) + x - (segments - 1));
-					indicies.push_back(y * (segments) + ((x + 1) % segments) - (segments - 1));
-					indicies.push_back((y + 1) * (segments) + x - (segments - 1));
+				indicies.push_back(v1);
+				indicies.push_back(v2);
+				indicies.push_back(v3);
 
-					indicies.push_back(y * (segments) + ((x + 1) % segments) - (segments - 1));
-					indicies.push_back((y + 1) * (segments) + ((x + 1) % segments) - (segments - 1));
-					indicies.push_back((y + 1) * (segments) + x - (segments - 1));
-				}
+				indicies.push_back(v2);
+				indicies.push_back(v4);
+				indicies.push_back(v3);
+
+
+				glm::vec3 pos1 = vertex_data[v1];
+				glm::vec3 pos2 = vertex_data[v2];
+				glm::vec3 pos3 = vertex_data[v3];
+				glm::vec2 uv1 = tc_data[v1];
+				glm::vec2 uv2 = tc_data[v2];
+				glm::vec2 uv3 = tc_data[v3];
+
+				glm::vec3 edge1 = pos2 - pos1;
+				glm::vec3 edge2 = pos3 - pos1;
+				glm::vec2 deltaUV1 = uv2 - uv1;
+				glm::vec2 deltaUV2 = uv3 - uv1;
+
+				glm::vec3 tangent, bitangent;
+				float f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
+				tangent = f * (deltaUV2.y * edge1 - deltaUV1.y * edge2);
+
+				bitangent = f * (-deltaUV2.x * edge1 + deltaUV1.x * edge2);
+
+				tangents.at(v1).push_back(tangent);
+				tangents.at(v2).push_back(tangent);
+				tangents.at(v3).push_back(tangent);
+				tangents.at(v4).push_back(tangent);
+				bitangents.at(v1).push_back(bitangent);
+				bitangents.at(v2).push_back(bitangent);
+				bitangents.at(v3).push_back(bitangent);
+				bitangents.at(v4).push_back(bitangent);
 			}
+		}
+
+		for (int i = 0; i < vertex_data.size(); ++i)
+		{
+			vertices.push_back(vertex_data[i].x);
+			vertices.push_back(vertex_data[i].y);
+			vertices.push_back(vertex_data[i].z);
+
+			vertices.push_back(normal_data[i].x);
+			vertices.push_back(normal_data[i].y);
+			vertices.push_back(normal_data[i].z);
+
+			vertices.push_back(tc_data[i].x);
+			vertices.push_back(tc_data[i].y);
+
+			glm::vec3 tangent, bitangent;
+			for (int j = 0; j < tangents.at(i).size(); ++j)
+			{
+				tangent += tangents.at(i).at(j);
+				bitangent += bitangents.at(i).at(j);
+			}
+
+			tangent = tangent / (float)tangents.at(i).size();
+			bitangent = bitangent / (float)bitangents.at(i).size();
+
+			vertices.push_back(tangent.x);
+			vertices.push_back(tangent.y);
+			vertices.push_back(tangent.z);
+
+			vertices.push_back(bitangent.x);
+			vertices.push_back(bitangent.y);
+			vertices.push_back(bitangent.z);
 		}
 
 		// TODO: Something else here
@@ -203,6 +269,8 @@ namespace Cobalt
 		layout.Push<float>(3);
 		layout.Push<float>(3);
 		layout.Push<float>(2);
+		layout.Push<float>(3);
+		layout.Push<float>(3);
 
 		// TODO: Make these a smart pointers
 		return new Model(new Mesh(vertices.data(), vertices.size(), layout, indicies.data(), indicies.size(), material), material);

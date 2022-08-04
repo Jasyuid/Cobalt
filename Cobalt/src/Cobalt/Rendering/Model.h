@@ -12,7 +12,7 @@ namespace Cobalt
 	{
 	public:
 		// Create model from object file
-		Model(const std::string& filename, std::shared_ptr<Material> material);
+		Model(const std::string& filename, std::shared_ptr<Material> material, const bool gen_tangents = true);
 		// Create model from predefined mesh
 		Model(Mesh* m, std::shared_ptr<Material> material);
 		~Model();
@@ -29,11 +29,11 @@ namespace Cobalt
 		inline void SetMaterial(std::shared_ptr<Material> mat) { m_Material = mat; }
 
 		// Return a model of a sphere
-		static Model* CreateSphere(std::shared_ptr<Material> material, unsigned int segments = 64);
+		static Model* CreateSphere(std::shared_ptr<Material> material, unsigned int segments = 64, const bool gen_tangents = true);
 
 	private:
-		void LoadModel(const std::string& filename);
-		void ProcessNode(const aiNode* node, const aiScene* scene);
+		void LoadModel(const std::string& filename, const bool gen_tangents);
+		void ProcessNode(const aiNode* node, const aiScene* scene, const bool gen_tangents);
 
 	private:
 		std::vector<Mesh*> m_Meshes; // List of meshes in model

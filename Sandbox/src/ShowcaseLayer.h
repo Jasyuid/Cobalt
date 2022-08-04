@@ -26,7 +26,8 @@ private:
 	CobaltMaterial tex_mat;
 	CobaltMaterial texl_mat;
 	CobaltMaterial pbr_mat;
-	CobaltMaterial pbrt_mat;
+	CobaltMaterial gun_mat;
+	CobaltMaterial rust_mat;
 
 	Cobalt::Light* light;
 	float light_int;

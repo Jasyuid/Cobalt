@@ -20,25 +20,32 @@ void ShowcaseLayer::OnAttach()
 	Cobalt::Texture* gun_m = new Cobalt::Texture("res/Cerberus/Cerberus_M.png");
 	Cobalt::Texture* gun_ao = new Cobalt::Texture("res/Cerberus/Cerberus_AO.png");
 
+	Cobalt::Texture* rust_a = new Cobalt::Texture("res/Rust/albedo.png");
+	Cobalt::Texture* rust_n = new Cobalt::Texture("res/Rust/normal.png");
+	Cobalt::Texture* rust_r = new Cobalt::Texture("res/Rust/roughness.png");
+	Cobalt::Texture* rust_m = new Cobalt::Texture("res/Rust/metallic.png");
+	Cobalt::Texture* rust_ao = new Cobalt::Texture("res/Rust/ao.png");
+
 	Cobalt::Shader* shader = new Cobalt::Shader("res/shaders/Basic.vert", "res/shaders/Basic.frag");
 	Cobalt::Shader* tex_shader = new Cobalt::Shader("res/shaders/Basic.vert", "res/shaders/BasicTexture.frag");
 	Cobalt::Shader* texl_shader = new Cobalt::Shader("res/shaders/Basic.vert", "res/shaders/LightTexture.frag");
 	Cobalt::Shader* pbr_shader = new Cobalt::Shader("res/shaders/Basic.vert", "res/shaders/PBR.frag");
-	Cobalt::Shader* pbrt_shader = new Cobalt::Shader("res/shaders/Basic.vert", "res/shaders/TexturePBR.frag");
+	Cobalt::Shader* pbrt_shader = new Cobalt::Shader("res/shaders/Tangent.vert", "res/shaders/TexturePBR.frag");
 
 	mat = CobaltMaterial(new Cobalt::BasicMaterial(shader));
 	tex_mat = CobaltMaterial(new Cobalt::TextureMaterial(tex_shader, gun_a));
 	texl_mat = CobaltMaterial(new Cobalt::TextureMaterial(texl_shader, gun_a));
 	pbr_mat = CobaltMaterial(new Cobalt::ColorMaterial(pbr_shader, glm::vec3(1.0f, 0.01f, 0.01f), 0.5f, 0.5f, 0.1f));
-	pbrt_mat = CobaltMaterial(new Cobalt::PBRMaterial(pbrt_shader, gun_a, gun_n, gun_r, gun_m, gun_ao));
+	gun_mat = CobaltMaterial(new Cobalt::PBRMaterial(pbrt_shader, gun_a, gun_n, gun_r, gun_m, gun_ao));
+	rust_mat = CobaltMaterial(new Cobalt::PBRMaterial(pbrt_shader, rust_a, rust_n, rust_r, rust_m, rust_ao));
 
-	Cobalt::Model* gun = new Cobalt::Model("res/Cerberus/Cerberus_LP.fbx", pbrt_mat);
+	Cobalt::Model* gun = new Cobalt::Model("res/Cerberus/Cerberus_LP.fbx", gun_mat);
 	gun->Scale(glm::vec3(0.1f));
 	gun->Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 
-	Cobalt::Model* sphere = Cobalt::Model::CreateSphere(pbr_mat);
+	Cobalt::Model* sphere = Cobalt::Model::CreateSphere(rust_mat);
 
-	model = gun;
+	model = sphere;
 
 	light = new Cobalt::Light(glm::vec3(10.0f), glm::vec3(1.0f, 1.0f, 1.0f));
 	light_int = 500.0f;
@@ -72,7 +79,7 @@ bool ShowcaseLayer::OnEvent(Cobalt::Event& e)
 
 void ShowcaseLayer::OnUpdate(float dt)
 {
-	model->Rotate(10.0f * dt, glm::vec3(0.0f, 1.0f, 0.0f));
+	//model->Rotate(10.0f * dt, glm::vec3(0.0f, 1.0f, 0.0f));
 	//light_int += 50.0f * dt;
 
 	camera->OnUpdate(dt);

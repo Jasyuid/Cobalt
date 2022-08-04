@@ -1,16 +1,19 @@
 #version 330 core
 
-layout(location = 0) out vec4 fragColor;
+layout(location = 0) out vec4 fColor;
 
-in vec3 fragPos;
-in vec3 fragNormal;
-in vec2 texCoord;
+in VS_OUT {
+	vec3 fPos;
+	vec2 texCoord;
+	mat3 TBN;
+	vec3 normal;
+} fs_in;
 
-uniform sampler2D albedoTex;
-uniform sampler2D normalTex;
-uniform sampler2D metallicTex;
-uniform sampler2D roughnessTex;
-uniform sampler2D aoTex;
+uniform sampler2D albedoMap;
+uniform sampler2D normalMap;
+uniform sampler2D metallicMap;
+uniform sampler2D roughnessMap;
+uniform sampler2D aoMap;
 
 uniform vec3 viewPos;
 uniform vec3 lightPos;
@@ -61,23 +64,25 @@ float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness)
 
 void main()
 {
-	vec3 albedo = texture(albedoTex, texCoord).rgb;
-	vec3 normal = texture(normalTex, texCoord).rgb;
-	float roughness = texture(roughnessTex, texCoord).r;
-	float metallic = texture(metallicTex, texCoord).r;
-	float ao = texture(aoTex, texCoord).r;
+	vec3 albedo = texture(albedoMap, fs_in.texCoord).rgb;
+	float roughness = texture(roughnessMap, fs_in.texCoord).r;
+	float metallic = texture(metallicMap, fs_in.texCoord).r;
+	float ao = texture(aoMap, fs_in.texCoord).r;
 
-	vec3 N = normalize(fragNormal);
-	vec3 V = normalize(viewPos - fragPos);
+	vec3 N = texture(normalMap, fs_in.texCoord).rgb;
+	N = N * 2.0 - 1.0;
+	N = normalize(fs_in.TBN * N);
+	//N = normalize(fs_in.normal);
+	vec3 V = normalize(viewPos - fs_in.fPos);
 
 	vec3 F0 = vec3(0.04);
 	F0 = mix(F0, albedo, metallic);
 	
 	vec3 Lo = vec3(0.0);
 
-	vec3 L = normalize(lightPos - fragPos);
+	vec3 L = normalize(lightPos - fs_in.fPos);
 	vec3 H = normalize(V + L);
-	float dist = length(lightPos - fragPos);
+	float dist = length(lightPos - fs_in.fPos);
 	float atten = 1.0 / (dist * dist);
 	vec3 radiance = lightCol * lightInt * atten;
 	//vec3 radiance = lightCol;
@@ -104,5 +109,5 @@ void main()
 	color = color / (color + vec3(1.0));
 	color = pow(color, vec3(1.0/2.2));
 
-	fragColor = vec4(color, 1.0);
+	fColor = vec4(color, 1.0);
 }
