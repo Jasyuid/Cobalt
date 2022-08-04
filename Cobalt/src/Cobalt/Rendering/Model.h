@@ -11,7 +11,9 @@ namespace Cobalt
 	class Model
 	{
 	public:
+		// Create model from object file
 		Model(const std::string& filename, std::shared_ptr<Material> material);
+		// Create model from predefined mesh
 		Model(Mesh* m, std::shared_ptr<Material> material);
 		~Model();
 

@@ -15,6 +15,7 @@ namespace Cobalt
 		: m_ModelMat(glm::mat4(1.0f)), m_Material(material), m_Transpose(glm::mat4(1.0f)),
 		m_Rotation(glm::mat4(1.0f)), m_Scale(glm::mat4(1.0)), m_Position(glm::vec3(0.0f))
 	{
+		// 
 		m_Meshes.push_back(m);
 	}
 
