@@ -91,16 +91,16 @@ namespace Cobalt
 		m_Pitch -= delta.y * 1.0f;
 
 		// Stop yaw value from exceeding 2pi or -2pi
-		if (m_Yaw > std::acos(-1.0))
-			m_Yaw -= 2*std::acos(-1.0);
-		else if (m_Yaw < -std::acos(-1.0))
-			m_Yaw += 2*std::acos(-1.0);
+		if (m_Yaw > glm::pi<float>())
+			m_Yaw -= 2*glm::pi<float>();
+		else if (m_Yaw < -glm::pi<float>())
+			m_Yaw += 2*glm::pi<float>();
 
 		// Stop camera when it is looking straight up or down
-		if (m_Pitch >= std::acos(0.0))
-			m_Pitch = std::acos(0.0) - 0.001f;
-		else if (m_Pitch <= -std::acos(0.0))
-			m_Pitch = -std::acos(0.0) + 0.001f;
+		if (m_Pitch >= (glm::pi<float>()/2.0f))
+			m_Pitch = (glm::pi<float>()/2.0f) - 0.001f;
+		else if (m_Pitch <= -(glm::pi<float>()/2.0f))
+			m_Pitch = -(glm::pi<float>()/2.0f) + 0.001f;
 
 	}
 

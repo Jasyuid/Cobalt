@@ -24,11 +24,16 @@ void ShowcaseLayer::OnAttach()
 	tex_mat = std::shared_ptr<Cobalt::Material>(new Cobalt::TextureMaterial(tex_shader, tex));
 	texl_mat = std::shared_ptr<Cobalt::Material>(new Cobalt::TextureMaterial(texl_shader, tex));
 
-	model = new Cobalt::Model("res/Cerberus/Cerberus_LP.fbx", texl_mat);
-	model->Scale(glm::vec3(0.1f));
-	model->Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	Cobalt::Model* gun = new Cobalt::Model("res/Cerberus/Cerberus_LP.fbx", texl_mat);
+	gun->Scale(glm::vec3(0.1f));
+	gun->Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+
+	Cobalt::Model* sphere = Cobalt::Model::CreateSphere(mat);
+
+	model = gun;
 
 	light = new Cobalt::Light(glm::vec3(10.0f), glm::vec3(0.5f, 0.8f, 1.0f));
+
 }
 
 void ShowcaseLayer::OnDetach()
@@ -60,7 +65,7 @@ void ShowcaseLayer::OnUpdate(float dt)
 {
 	//model->Rotate(10.0f * dt, glm::vec3(0.0f, 1.0f, 0.0f));
 
-	camera->OnUpdate(0.0f);
+	camera->OnUpdate(dt);
 
 	model->GetMaterial()->GetShader()->Bind();
 	model->GetMaterial()->GetShader()->SetUniformMat4("camera", camera->GetCameraMatrix());
